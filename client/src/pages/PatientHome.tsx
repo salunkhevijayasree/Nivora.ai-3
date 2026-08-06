@@ -12,7 +12,9 @@ import {
   MapPin, 
   RefreshCw, 
   ShieldCheck, 
-  Bed 
+  Bed,
+  Navigation,
+  Bot
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useHospital } from '../context/HospitalContext';
@@ -39,17 +41,20 @@ export default function PatientHome() {
       {selectedHospital ? (
         <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 ${selectedHospital.colorTheme}`}>
-              <Building2 size={20} />
+            <div className={`w-11 h-11 rounded-2xl flex items-center justify-center text-white shrink-0 ${selectedHospital.colorTheme}`}>
+              <Building2 size={22} />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] uppercase font-bold tracking-wider text-hospital-600 dark:text-hospital-400">Active Hospital Campus</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-hospital-600 dark:text-hospital-400">Selected Partner Hospital</span>
+                <span className="text-[10px] font-bold bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <Navigation size={10} className="fill-current" /> {selectedHospital.distanceKm} km away from location
+                </span>
                 <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 px-2 py-0.5 rounded-full flex items-center gap-1">
                   <Bed size={10} /> {selectedHospital.availableBeds} Beds Open
                 </span>
               </div>
-              <h2 className="font-bold text-gray-900 dark:text-white text-sm">{selectedHospital.name}</h2>
+              <h2 className="font-bold text-gray-900 dark:text-white text-base mt-0.5">{selectedHospital.name}</h2>
               <p className="text-xs text-gray-500 flex items-center gap-1">
                 <MapPin size={12}/> {selectedHospital.address}
               </p>
@@ -58,36 +63,50 @@ export default function PatientHome() {
 
           <button 
             onClick={() => navigate('/patient/hospitals')}
-            className="px-3.5 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-xs font-bold text-gray-700 dark:text-gray-200 flex items-center gap-1.5 transition-all w-full sm:w-auto justify-center shrink-0"
+            className="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-xs font-bold text-gray-700 dark:text-gray-200 flex items-center gap-1.5 transition-all w-full sm:w-auto justify-center shrink-0 shadow-sm"
           >
-            <RefreshCw size={13} className="text-hospital-600" /> Switch Hospital
+            <RefreshCw size={14} className="text-hospital-600" /> Switch Hospital
           </button>
         </div>
       ) : (
         <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-4 rounded-2xl flex items-center justify-between">
-          <span className="text-xs text-amber-800 dark:text-amber-300 font-medium">No hospital campus selected. Please select a hospital to view doctors & live queue.</span>
+          <span className="text-xs text-amber-800 dark:text-amber-300 font-medium">No partner hospital selected. Please select a hospital to view doctors & live queue.</span>
           <button onClick={() => navigate('/patient/hospitals')} className="bg-amber-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold">Select Hospital</button>
         </div>
       )}
       
       {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-hospital-600 to-hospital-800 rounded-3xl p-6 text-white shadow-xl shadow-hospital-900/20 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-hospital-600 via-hospital-700 to-indigo-900 rounded-3xl p-6 text-white shadow-xl shadow-hospital-900/20 relative overflow-hidden space-y-3">
         <div className="relative z-10">
-          <div className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-0.5 rounded-full text-xs font-medium mb-3 text-hospital-100">
-            <ShieldCheck size={14} /> ABHA Patient Portal • Renu Sharma
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-0.5 rounded-full text-xs font-medium text-white">
+              <Bot size={13} className="text-hospital-300" /> Powered by NIVORA AI Engine
+            </span>
+            <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 backdrop-blur-md px-3 py-0.5 rounded-full text-xs font-medium text-emerald-200">
+              <ShieldCheck size={13} /> Renu Sharma (ABHA ID: 91-xxxx-4321)
+            </span>
           </div>
+
           <h1 className="text-2xl md:text-3xl font-bold mb-1">Welcome back, Renu Sharma! 👋</h1>
-          <p className="text-hospital-100 max-w-md text-xs sm:text-sm">
-            Encounter active at {selectedHospital ? selectedHospital.name : 'Nivora Super Specialty'}. Upcoming Cardiology check-up today at 2:30 PM (Token #42).
+          <p className="text-hospital-100 max-w-md text-xs sm:text-sm leading-relaxed">
+            Encounter active at <strong className="text-white font-bold">{selectedHospital ? selectedHospital.name : 'Apollo Hospitals'}</strong>. Upcoming Cardiology check-up today at 2:30 PM (Token #42).
           </p>
         </div>
         <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
       </div>
 
-      {/* Quick Action Grid */}
+      {/* Quick Action Grid Header */}
       <div className="flex items-center justify-between mt-8 mb-4">
-        <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">Hospital Services</h2>
-        <span className="text-xs text-gray-400">Scoped to selected hospital</span>
+        <div>
+          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">Hospital Services</h2>
+          <p className="text-xs text-gray-400">Services scoped to {selectedHospital ? selectedHospital.name : 'selected hospital'}</p>
+        </div>
+        <button 
+          onClick={() => navigate('/patient/hospitals')}
+          className="text-xs text-hospital-600 font-bold hover:underline"
+        >
+          View All Partner Hospitals &rarr;
+        </button>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-4">

@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Building2, 
   MapPin, 
   Star, 
   Search, 
   PhoneCall, 
   Bed, 
   ChevronRight, 
-  CheckCircle2 
+  CheckCircle2,
+  Navigation,
+  Bot
 } from 'lucide-react';
 import { useHospital, type Hospital } from '../context/HospitalContext';
 
-const FILTER_TAGS = ['All', 'Cardiology', 'Pediatrics', 'Neurology', 'Orthopedics', 'Near Me (<3 km)', '24/7 ER Active'];
+const FILTER_TAGS = ['All', 'Near Me (<3 km)', 'Cardiology', 'Neurology', 'Pediatrics', '24/7 ER Active'];
 
 export default function HospitalSelector() {
   const navigate = useNavigate();
@@ -44,11 +45,11 @@ export default function HospitalSelector() {
       <div className="bg-gradient-to-r from-hospital-700 via-hospital-800 to-indigo-900 rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative overflow-hidden space-y-3">
         <div className="relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-3.5 py-1 rounded-full text-xs font-semibold mb-2">
-            <Building2 size={14} /> Multi-Hospital Directory
+            <Bot size={14} className="text-hospital-300" /> NIVORA AI Smart Network
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">Select a Hospital Campus</h1>
+          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">Select Partner Hospital</h1>
           <p className="text-hospital-100 max-w-xl text-xs sm:text-sm leading-relaxed">
-            Choose your preferred Nivora Healthcare hospital to access doctor appointments, live OPD queue tracking, lab reports, and pharmacy services.
+            NIVORA AI powers workflow automation across top partner hospital networks. Choose a hospital near your current location to book appointments, track live queue, and access medical records.
           </p>
         </div>
         <div className="absolute right-0 top-0 w-72 h-72 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
@@ -59,7 +60,7 @@ export default function HospitalSelector() {
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
         <input 
           type="text"
-          placeholder="Search hospital by name, area (e.g. Indiranagar, Whitefield), or specialty..."
+          placeholder="Search partner hospital (Apollo, Yashoda, SevenHills, Care, Medicure)..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:ring-2 focus:ring-hospital-500 outline-none transition-all dark:text-white shadow-sm"
@@ -101,8 +102,9 @@ export default function HospitalSelector() {
                 {/* Card Header Banner */}
                 <div className={`bg-gradient-to-r ${hosp.imageBg} p-5 text-white relative`}>
                   <div className="flex justify-between items-start mb-2">
-                    <span className="text-[11px] font-bold uppercase tracking-wider bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full">
-                      {hosp.city}
+                    {/* Distance Badge */}
+                    <span className="text-xs font-bold bg-white/20 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 border border-white/30">
+                      <Navigation size={12} className="text-amber-300 fill-amber-300" /> {hosp.distanceKm} km away from your location
                     </span>
                     <div className="flex items-center gap-1 bg-amber-400 text-gray-900 px-2.5 py-0.5 rounded-full text-xs font-black shadow-sm">
                       <Star size={13} className="fill-current" />
@@ -110,7 +112,7 @@ export default function HospitalSelector() {
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-bold tracking-tight text-white group-hover:translate-x-1 transition-transform">{hosp.name}</h3>
+                  <h3 className="text-xl font-bold tracking-tight text-white group-hover:translate-x-1 transition-transform mt-2">{hosp.name}</h3>
                   <p className="text-xs text-white/80 mt-1">{hosp.tagline}</p>
                 </div>
 
@@ -119,7 +121,7 @@ export default function HospitalSelector() {
                   <div className="space-y-1.5 text-gray-600 dark:text-gray-300">
                     <p className="flex items-start gap-2">
                       <MapPin size={16} className="text-hospital-600 dark:text-hospital-400 shrink-0 mt-0.5" />
-                      <span>{hosp.address} • <strong className="text-gray-900 dark:text-white font-semibold">{hosp.distanceKm} km away</strong></span>
+                      <span className="font-medium">{hosp.address}</span>
                     </p>
                     <p className="flex items-center gap-2">
                       <PhoneCall size={16} className="text-emerald-500 shrink-0" />
@@ -130,7 +132,7 @@ export default function HospitalSelector() {
                   {/* Bed & ICU Status */}
                   <div className="bg-gray-50 dark:bg-gray-900/60 p-3 rounded-2xl border border-gray-100 dark:border-gray-700/60 flex items-center justify-between">
                     <span className="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300">
-                      <Bed size={16} className="text-hospital-600" /> Available Beds
+                      <Bed size={16} className="text-hospital-600" /> Live ICU & Bed Status
                     </span>
                     <span className="font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2.5 py-1 rounded-full text-xs border border-emerald-200 dark:border-emerald-800">
                       {hosp.availableBeds} / {hosp.totalBeds} Beds Open
@@ -139,7 +141,7 @@ export default function HospitalSelector() {
 
                   {/* Specialties Pills */}
                   <div>
-                    <span className="text-[11px] font-bold text-gray-400 block mb-1.5 uppercase tracking-wider">Key Departments</span>
+                    <span className="text-[11px] font-bold text-gray-400 block mb-1.5 uppercase tracking-wider">Departments & Specialties</span>
                     <div className="flex flex-wrap gap-1.5">
                       {hosp.specialties.map(spec => (
                         <span key={spec} className="px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-[11px] font-medium">
