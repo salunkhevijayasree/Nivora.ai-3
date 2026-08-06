@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import PatientHome from './pages/PatientHome';
+import HospitalSelector from './pages/HospitalSelector';
 import AppointmentBooking from './pages/AppointmentBooking';
 import LiveQueueTracker from './pages/LiveQueueTracker';
 import MedicalRecords from './pages/MedicalRecords';
@@ -11,34 +12,40 @@ import HospitalMap from './pages/HospitalMap';
 import Telemedicine from './pages/Telemedicine';
 import Profile from './pages/Profile';
 import { ThemeProvider } from './context/ThemeContext';
+import { HospitalProvider } from './context/HospitalContext';
 
 function App() {
   return (
     <ThemeProvider>
-      <Router>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-200 pb-20 md:pb-0">
-          <Navbar />
-          <main className="max-w-5xl mx-auto p-4 pt-6">
-            <Routes>
-              <Route path="/" element={<Navigate to="/patient" replace />} />
-              
-              {/* Patient Core Routes */}
-              <Route path="/patient" element={<PatientHome />} />
-              <Route path="/patient/appointments" element={<AppointmentBooking />} />
-              <Route path="/patient/queue" element={<LiveQueueTracker />} />
-              <Route path="/patient/records" element={<MedicalRecords />} />
-              <Route path="/patient/pharmacy" element={<PharmacyHub />} />
-              <Route path="/patient/sos" element={<EmergencySOS />} />
-              <Route path="/patient/billing" element={<Billing />} />
-              <Route path="/patient/map" element={<HospitalMap />} />
-              <Route path="/patient/telemedicine" element={<Telemedicine />} />
-              <Route path="/patient/profile" element={<Profile />} />
+      <HospitalProvider>
+        <Router>
+          <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-200 pb-20 md:pb-0">
+            <Navbar />
+            <main className="max-w-5xl mx-auto p-4 pt-6">
+              <Routes>
+                <Route path="/" element={<Navigate to="/patient" replace />} />
+                
+                {/* 1st Interface: Multi-Hospital Selection */}
+                <Route path="/patient/hospitals" element={<HospitalSelector />} />
 
-              {/* Add other role routes (Doctor, Receptionist, Admin) later */}
-            </Routes>
-          </main>
-        </div>
-      </Router>
+                {/* 2nd Interface: Selected Hospital Quick Access Portal */}
+                <Route path="/patient" element={<PatientHome />} />
+
+                {/* Hospital Services Routes */}
+                <Route path="/patient/appointments" element={<AppointmentBooking />} />
+                <Route path="/patient/queue" element={<LiveQueueTracker />} />
+                <Route path="/patient/records" element={<MedicalRecords />} />
+                <Route path="/patient/pharmacy" element={<PharmacyHub />} />
+                <Route path="/patient/sos" element={<EmergencySOS />} />
+                <Route path="/patient/billing" element={<Billing />} />
+                <Route path="/patient/map" element={<HospitalMap />} />
+                <Route path="/patient/telemedicine" element={<Telemedicine />} />
+                <Route path="/patient/profile" element={<Profile />} />
+              </Routes>
+            </main>
+          </div>
+        </Router>
+      </HospitalProvider>
     </ThemeProvider>
   );
 }
