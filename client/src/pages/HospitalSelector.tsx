@@ -9,7 +9,8 @@ import {
   ChevronRight, 
   CheckCircle2,
   Navigation,
-  Bot
+  Bot,
+  Sparkles
 } from 'lucide-react';
 import { useHospital, type Hospital } from '../context/HospitalContext';
 
@@ -20,6 +21,7 @@ export default function HospitalSelector() {
   const { hospitals, selectedHospital, setSelectedHospital } = useHospital();
   const [search, setSearch] = useState('');
   const [activeTag, setActiveTag] = useState('All');
+  const [aiInput, setAiInput] = useState('');
 
   const filteredHospitals = hospitals.filter(hosp => {
     const matchesSearch = hosp.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -38,22 +40,51 @@ export default function HospitalSelector() {
     navigate('/patient');
   };
 
+  const handleAskAI = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!aiInput.trim()) return;
+    setSearch(aiInput);
+  };
+
   return (
     <div className="space-y-6 animate-in pb-12">
       
-      {/* Header Banner */}
-      <div className="bg-gradient-to-r from-hospital-700 via-hospital-800 to-indigo-900 rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative overflow-hidden space-y-3">
-        <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-3.5 py-1 rounded-full text-xs font-bold mb-2 tracking-wide">
+      {/* Header Banner with Embedded AI Assistant */}
+      <div className="bg-gradient-to-r from-hospital-700 via-hospital-800 to-indigo-900 rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative overflow-hidden space-y-4">
+        <div className="relative z-10 space-y-3">
+          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-3.5 py-1 rounded-full text-xs font-bold tracking-wide">
             <Bot size={14} className="text-hospital-300" /> NIVORA AI
           </div>
+
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
             AI Powered Hospital Workflow Automation
           </h1>
-          <p className="text-hospital-100 max-w-xl text-sm font-medium leading-relaxed pt-1">
+
+          <p className="text-hospital-100 max-w-xl text-sm font-medium leading-relaxed">
             "Personalized Guidance for Every Patient"
           </p>
+
+          {/* Embedded AI Chatbot Search Bar */}
+          <form onSubmit={handleAskAI} className="pt-2">
+            <div className="relative max-w-xl">
+              <Sparkles className="absolute left-3.5 top-1/2 -translate-y-1/2 text-amber-300" size={18} />
+              <input 
+                type="text"
+                placeholder="Ask NIVORA AI Assistant (e.g. 'Best heart hospital near me' or '24/7 Emergency')..."
+                value={aiInput}
+                onChange={(e) => setAiInput(e.target.value)}
+                className="w-full pl-10 pr-28 py-3 rounded-2xl bg-white/15 backdrop-blur-md text-white placeholder-white/75 border border-white/20 text-xs focus:outline-none focus:ring-2 focus:ring-amber-300"
+              />
+              <button 
+                type="submit"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-amber-400 hover:bg-amber-300 text-gray-900 px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-md transition-all"
+              >
+                <Bot size={15} /> Ask AI
+              </button>
+            </div>
+          </form>
         </div>
+
         <div className="absolute right-0 top-0 w-72 h-72 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
       </div>
 

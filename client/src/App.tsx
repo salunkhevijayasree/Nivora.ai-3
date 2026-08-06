@@ -11,6 +11,7 @@ import Billing from './pages/Billing';
 import HospitalMap from './pages/HospitalMap';
 import Telemedicine from './pages/Telemedicine';
 import Profile from './pages/Profile';
+import AIChatbotWidget from './components/ai/AIChatbotWidget';
 import { ThemeProvider } from './context/ThemeContext';
 import { HospitalProvider } from './context/HospitalContext';
 
@@ -19,7 +20,7 @@ function App() {
     <ThemeProvider>
       <HospitalProvider>
         <Router>
-          <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-200 pb-20 md:pb-0">
+          <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-200 pb-20 md:pb-0 relative">
             <Navbar />
             <main className="max-w-5xl mx-auto p-4 pt-6">
               <Routes>
@@ -44,6 +45,9 @@ function App() {
                 <Route path="/patient/profile" element={<Profile />} />
               </Routes>
             </main>
+
+            {/* Global AI Chatbot Assistant Widget */}
+            <AIChatbotWidget />
           </div>
         </Router>
       </HospitalProvider>
