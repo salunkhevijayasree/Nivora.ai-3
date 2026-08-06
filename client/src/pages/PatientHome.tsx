@@ -3,7 +3,6 @@ import {
   CalendarPlus, 
   Users, 
   FileText, 
-  Microscope, 
   Pill, 
   PhoneCall, 
   CreditCard, 
@@ -16,9 +15,8 @@ import clsx from 'clsx';
 const gridItems = [
   { id: 'find-book-doctor', title: 'Find Doctor & Book', icon: CalendarPlus, color: 'bg-blue-600', route: '/patient/appointments' },
   { id: 'live-queue', title: 'Live Queue Status', icon: Users, color: 'bg-indigo-600', route: '/patient/queue' },
-  { id: 'medical-records', title: 'My Medical Records', icon: FileText, color: 'bg-emerald-600', route: '/patient/records' },
-  { id: 'lab-reports', title: 'Lab Reports', icon: Microscope, color: 'bg-teal-600', route: '/patient/records' },
-  { id: 'medicines', title: 'Medicines', icon: Pill, color: 'bg-purple-600', route: '/patient/pharmacy' },
+  { id: 'medical-lab-records', title: 'Medical & Lab Reports', icon: FileText, color: 'bg-emerald-600', route: '/patient/records' },
+  { id: 'medicines', title: 'Medicines & Refills', icon: Pill, color: 'bg-purple-600', route: '/patient/pharmacy' },
   { id: 'emergency-sos', title: 'Emergency SOS', icon: PhoneCall, color: 'bg-red-600', route: '/patient/sos', pulse: true },
   { id: 'bills-payments', title: 'Bills & Payments', icon: CreditCard, color: 'bg-amber-600', route: '/patient/billing' },
   { id: 'hospital-map', title: 'Hospital Map', icon: Map, color: 'bg-cyan-600', route: '/patient/map' },
@@ -51,7 +49,7 @@ export default function PatientHome() {
 
       {/* Quick Action Grid */}
       <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mt-8 mb-4">Quick Access</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 md:gap-4">
         {gridItems.map((item) => (
           <button
             key={item.id}
