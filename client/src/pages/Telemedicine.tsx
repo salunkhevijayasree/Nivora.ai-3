@@ -11,7 +11,11 @@ import {
   Sun, 
   Ban, 
   Lightbulb, 
-  ArrowLeft 
+  ArrowLeft,
+  Utensils,
+  Clock,
+  Flame,
+  CheckSquare
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,6 +30,82 @@ interface HealthTip {
   badgeBg: string;
   recommendedTime: string;
 }
+
+interface MealPlan {
+  id: number;
+  timeSlot: string;
+  mealName: string;
+  menuItems: string;
+  calories: string;
+  benefits: string;
+  iconBg: string;
+}
+
+const DAILY_MEAL_PLANS: MealPlan[] = [
+  {
+    id: 1,
+    timeSlot: '6:30 AM • Early Morning',
+    mealName: 'Morning Detox & Hydration',
+    menuItems: '1 Glass Warm Water + Lemon/Honey & 4 Soaked Almonds/Walnuts',
+    calories: '90 kcal',
+    benefits: 'Flushes out toxins, boosts metabolism & aids digestion',
+    iconBg: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300'
+  },
+  {
+    id: 2,
+    timeSlot: '8:30 AM • Healthy Breakfast',
+    mealName: 'High-Fiber Energy Breakfast',
+    menuItems: '2 Oats Idli / Vegetable Poha + 1 Boiled Egg (or Sprouted Moong) + Herbal Green Tea',
+    calories: '320 kcal',
+    benefits: 'Sustained morning energy & steady blood sugar',
+    iconBg: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300'
+  },
+  {
+    id: 3,
+    timeSlot: '11:00 AM • Mid-Morning Snack',
+    mealName: 'Vitamin & Electrolyte Boost',
+    menuItems: '1 Fresh Apple / Papaya Slices or 1 Glass Fresh Coconut Water',
+    calories: '110 kcal',
+    benefits: 'Natural Vitamin C, antioxidants & gut hydration',
+    iconBg: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300'
+  },
+  {
+    id: 4,
+    timeSlot: '1:30 PM • Balanced Lunch',
+    mealName: 'Wholesome Thali / Meal',
+    menuItems: '2 Multigrain Roti / Brown Rice + Dal/Rajma + Green Leafy Sabzi + Fresh Curd + Salad',
+    calories: '550 kcal',
+    benefits: 'Complete protein, essential minerals & healthy gut flora',
+    iconBg: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'
+  },
+  {
+    id: 5,
+    timeSlot: '5:00 PM • Evening Refresh',
+    mealName: 'Light Low-Calorie Evening Snack',
+    menuItems: '1 Cup Green Tea / Warm Milk + 1 Bowl Roasted Makhana or Roasted Chana',
+    calories: '150 kcal',
+    benefits: 'Prevents evening overeating & controls blood pressure',
+    iconBg: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300'
+  },
+  {
+    id: 6,
+    timeSlot: '8:00 PM • Light Dinner',
+    mealName: 'Easy-to-Digest Dinner',
+    menuItems: 'Lauki/Bottle Gourd Soup / Vegetable Dalia / Khichdi + Stir-fried Paneer or Tofu',
+    calories: '380 kcal',
+    benefits: 'Prevents acidity, aids nocturnal liver repair & sound sleep',
+    iconBg: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300'
+  },
+  {
+    id: 7,
+    timeSlot: '10:00 PM • Bedtime Drink',
+    mealName: 'Golden Turmeric Milk',
+    menuItems: '1 Small Glass Warm Milk + Pinch of Turmeric & Black Pepper',
+    calories: '120 kcal',
+    benefits: 'Anti-inflammatory, reduces joint pain & strengthens immunity',
+    iconBg: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300'
+  }
+];
 
 const HEALTH_TIPS: HealthTip[] = [
   {
@@ -125,6 +205,7 @@ export default function Telemedicine() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [selectedTip, setSelectedTip] = useState<HealthTip | null>(HEALTH_TIPS[0]);
   const [completedHabits, setCompletedHabits] = useState<Record<number, boolean>>({ 1: true, 2: true });
+  const [loggedMeals, setLoggedMeals] = useState<Record<number, boolean>>({ 1: true, 2: true, 4: true });
 
   const filteredTips = activeCategory === 'All' 
     ? HEALTH_TIPS 
@@ -132,6 +213,10 @@ export default function Telemedicine() {
 
   const toggleHabit = (id: number) => {
     setCompletedHabits(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const toggleMealLog = (id: number) => {
+    setLoggedMeals(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
@@ -147,7 +232,7 @@ export default function Telemedicine() {
         </button>
 
         <span className="text-xs font-semibold text-gray-500 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
-          Aug 06, 2026 • Verified Medical Guidance
+          Aug 06, 2026 • Verified Medical Nutrition
         </span>
       </div>
 
@@ -155,14 +240,77 @@ export default function Telemedicine() {
       <div className="bg-gradient-to-r from-emerald-600 via-teal-700 to-hospital-800 rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative overflow-hidden space-y-3">
         <div className="relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md text-white px-3.5 py-1 rounded-full text-xs font-bold mb-2">
-            <HeartHandshake size={16} /> Preventive Healthcare & Wellness Guide
+            <HeartHandshake size={16} /> Daily Health Tips & Healthy Meal Plans
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">Daily Health & Immunity Tips</h1>
+          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">Daily Health & Nutrition Guide</h1>
           <p className="text-emerald-100 max-w-xl text-xs sm:text-sm leading-relaxed">
-            Practical daily habits, warm water benefits, infection prevention, mask guidelines, and nutritious routines for Renu Sharma and family.
+            Practical daily meal schedules, warm water hydration, infection prevention, and balanced diet plans for Renu Sharma and family.
           </p>
         </div>
         <div className="absolute right-0 top-0 w-72 h-72 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* DAILY HEALTHY MEAL PLANS SECTION */}
+      {/* ========================================================================= */}
+      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-6 shadow-sm space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-100 dark:border-gray-700 pb-3">
+          <div>
+            <h2 className="font-bold text-gray-900 dark:text-white flex items-center gap-2 text-lg">
+              <Utensils size={22} className="text-emerald-600" /> Daily Healthy Meal Plan Schedule
+            </h2>
+            <p className="text-xs text-gray-500">Clinical Nutritionist Approved Diet Routine for Daily Vitality</p>
+          </div>
+
+          <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-800 w-fit">
+            Total Daily Target: ~1,700 kcal
+          </span>
+        </div>
+
+        {/* Meal Schedule Timeline List */}
+        <div className="space-y-3">
+          {DAILY_MEAL_PLANS.map(meal => (
+            <div 
+              key={meal.id}
+              onClick={() => toggleMealLog(meal.id)}
+              className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-3 ${
+                loggedMeals[meal.id]
+                  ? 'border-emerald-300 bg-emerald-50/50 dark:bg-emerald-950/20 dark:border-emerald-800'
+                  : 'border-gray-100 dark:border-gray-700/60 bg-gray-50/50 dark:bg-gray-900/40 hover:border-emerald-200'
+              }`}
+            >
+              <div className="flex items-start gap-3">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 ${meal.iconBg}`}>
+                  <Utensils size={18} />
+                </div>
+                <div className="space-y-0.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 bg-white dark:bg-gray-800 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-700">
+                      <Clock size={10} className="inline mr-1" /> {meal.timeSlot}
+                    </span>
+                    <span className="text-xs font-bold text-gray-900 dark:text-white">{meal.mealName}</span>
+                  </div>
+                  <p className="text-xs text-gray-700 dark:text-gray-200 font-medium pt-0.5">{meal.menuItems}</p>
+                  <p className="text-[11px] text-gray-400">{meal.benefits}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between md:flex-col md:items-end gap-2 shrink-0 border-t md:border-t-0 pt-2 md:pt-0 border-gray-200 dark:border-gray-700">
+                <span className="text-xs font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                  <Flame size={14} /> {meal.calories}
+                </span>
+
+                <button className={`px-3 py-1 rounded-xl text-xs font-bold flex items-center gap-1 transition-all ${
+                  loggedMeals[meal.id]
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : 'bg-white dark:bg-gray-800 text-gray-600 border border-gray-200 dark:border-gray-700'
+                }`}>
+                  <CheckSquare size={13} /> {loggedMeals[meal.id] ? 'Eaten' : 'Log Meal'}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Daily Wellness Habit Tracker Banner */}
