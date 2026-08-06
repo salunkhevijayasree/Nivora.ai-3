@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom';
-import { Moon, Sun, Bell, UserCircle, Activity } from 'lucide-react';
+import { Moon, Sun, Bell, UserCircle, Activity, Bot, Sparkles } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
+
+  const handleOpenAIChat = () => {
+    window.dispatchEvent(new CustomEvent('open-ai-chatbot'));
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full backdrop-blur-lg bg-white/70 dark:bg-gray-900/70 border-b border-gray-200 dark:border-gray-800">
@@ -19,8 +23,20 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Right Actions */}
+        {/* Right Upper-Hand Actions (Clean Inline Layout — No Overlap) */}
         <div className="flex items-center gap-3">
+          
+          {/* Upper-Right Hand AI Chatbot Button */}
+          <button
+            onClick={handleOpenAIChat}
+            className="flex items-center gap-1.5 bg-gradient-to-r from-hospital-600 to-indigo-600 hover:from-hospital-700 hover:to-indigo-700 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-md shadow-hospital-600/20 transition-all hover:scale-105 active:scale-95 border border-white/20"
+            title="Open NIVORA AI Assistant"
+          >
+            <Bot size={15} className="text-hospital-200 animate-pulse" />
+            <span className="hidden sm:inline-block">Ask NIVORA AI</span>
+            <Sparkles size={13} className="text-amber-300" />
+          </button>
+
           <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 relative text-gray-600 dark:text-gray-300 transition-colors">
             <Bell size={20} />
             <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-gray-900"></span>

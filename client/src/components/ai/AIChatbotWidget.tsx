@@ -44,6 +44,13 @@ export default function AIChatbotWidget() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
+  // Listen for custom event triggered from Upper Right-Hand buttons
+  useEffect(() => {
+    const handleCustomOpen = () => setIsOpen(true);
+    window.addEventListener('open-ai-chatbot', handleCustomOpen);
+    return () => window.removeEventListener('open-ai-chatbot', handleCustomOpen);
+  }, []);
+
   const handleSend = (textToSend?: string) => {
     const query = textToSend || input;
     if (!query.trim()) return;
@@ -102,144 +109,124 @@ export default function AIChatbotWidget() {
     }, 1000);
   };
 
+  if (!isOpen) return null;
+
   return (
-    <>
-      {/* Floating Widget Toggle Button (Bottom-Right) */}
-      {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-hospital-600 to-indigo-700 hover:from-hospital-700 hover:to-indigo-800 text-white p-3.5 sm:px-5 sm:py-3.5 rounded-full shadow-2xl flex items-center gap-2.5 transition-all hover:scale-105 group border border-white/20 active:scale-95"
-        >
-          <div className="relative">
-            <Bot size={22} className="animate-bounce text-hospital-200" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-gray-900"></span>
+    <div className="fixed top-20 right-4 sm:right-8 z-50 w-[calc(100vw-2rem)] sm:w-[420px] h-[540px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-zoom">
+      
+      {/* Header */}
+      <div className="bg-gradient-to-r from-hospital-700 via-hospital-800 to-indigo-900 p-4 text-white flex items-center justify-between shadow-md">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center text-hospital-200 border border-white/20">
+            <Bot size={22} />
           </div>
-          <span className="font-bold text-sm hidden sm:inline-block tracking-tight">
-            NIVORA AI Assistant
-          </span>
-          <Sparkles size={16} className="text-amber-300 animate-pulse hidden sm:inline-block" />
-        </button>
-      )}
-
-      {/* Expanded Chat Drawer / Window */}
-      {isOpen && (
-        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[400px] h-[540px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-zoom">
-          
-          {/* Header */}
-          <div className="bg-gradient-to-r from-hospital-700 via-hospital-800 to-indigo-900 p-4 text-white flex items-center justify-between shadow-md">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center text-hospital-200 border border-white/20">
-                <Bot size={22} />
-              </div>
-              <div>
-                <h3 className="font-bold text-sm flex items-center gap-1.5">
-                  NIVORA AI Assistant
-                  <Sparkles size={14} className="text-amber-300" />
-                </h3>
-                <p className="text-[11px] text-hospital-200 flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
-                  Active • {selectedHospital ? selectedHospital.name : 'Partner Network'}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-1">
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="p-1.5 text-white/80 hover:text-white rounded-full hover:bg-white/10 transition-colors"
-                title="Minimize"
-              >
-                <Minimize2 size={18} />
-              </button>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="p-1.5 text-white/80 hover:text-white rounded-full hover:bg-white/10 transition-colors"
-                title="Close"
-              >
-                <X size={18} />
-              </button>
-            </div>
+          <div>
+            <h3 className="font-bold text-sm flex items-center gap-1.5">
+              NIVORA AI Assistant
+              <Sparkles size={14} className="text-amber-300" />
+            </h3>
+            <p className="text-[11px] text-hospital-200 flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
+              Active • {selectedHospital ? selectedHospital.name : 'Partner Network'}
+            </p>
           </div>
-
-          {/* Messages Body */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50/50 dark:bg-gray-900/50 text-xs custom-scrollbar">
-            {messages.map(msg => (
-              <div
-                key={msg.id}
-                className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
-              >
-                <div
-                  className={`max-w-[85%] p-3.5 rounded-2xl leading-relaxed ${
-                    msg.sender === 'user'
-                      ? 'bg-hospital-600 text-white rounded-br-none shadow-sm'
-                      : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700/80 rounded-bl-none shadow-sm'
-                  }`}
-                >
-                  <p className="whitespace-pre-line">{msg.text}</p>
-
-                  {/* Quick Action Buttons attached to AI Message */}
-                  {msg.quickActions && msg.quickActions.length > 0 && (
-                    <div className="mt-2.5 pt-2 border-t border-gray-100 dark:border-gray-700/60 flex flex-col gap-1.5">
-                      {msg.quickActions.map((act, i) => (
-                        <a
-                          key={i}
-                          href={act.route}
-                          className="bg-hospital-50 dark:bg-hospital-900/40 text-hospital-700 dark:text-hospital-300 hover:bg-hospital-100 px-3 py-1.5 rounded-xl font-bold transition-all text-[11px] flex items-center justify-between border border-hospital-200 dark:border-hospital-800"
-                        >
-                          <span>{act.label}</span>
-                          <ChevronDown size={14} className="-rotate-90 text-hospital-500" />
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <span className="text-[10px] text-gray-400 mt-1 px-1">{msg.timestamp}</span>
-              </div>
-            ))}
-
-            {isTyping && (
-              <div className="flex items-center gap-2 text-gray-400 text-xs bg-white dark:bg-gray-800 p-3 rounded-2xl w-fit border border-gray-200 dark:border-gray-700">
-                <Bot size={16} className="animate-spin text-hospital-500" />
-                <span>NIVORA AI is thinking...</span>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Prompt Suggestion Chips */}
-          <div className="px-3 py-2 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-800 flex gap-1.5 overflow-x-auto custom-scrollbar shrink-0">
-            {QUICK_SUGGESTIONS.map((item, i) => (
-              <button
-                key={i}
-                onClick={() => handleSend(item.prompt)}
-                className="whitespace-nowrap px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-hospital-50 hover:text-hospital-600 text-[10px] font-medium text-gray-600 dark:text-gray-300 transition-all shrink-0"
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Input Bar */}
-          <div className="p-3 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex items-center gap-2">
-            <input
-              type="text"
-              placeholder="Ask NIVORA AI about symptoms, OPD tokens, lab reports..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              className="flex-1 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white text-xs px-3.5 py-2.5 rounded-xl border border-transparent focus:border-hospital-500 outline-none transition-all"
-            />
-            <button
-              onClick={() => handleSend()}
-              disabled={!input.trim()}
-              className="bg-hospital-600 hover:bg-hospital-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 text-white p-2.5 rounded-xl transition-all shadow-md shrink-0"
-            >
-              <Send size={16} />
-            </button>
-          </div>
-
         </div>
-      )}
-    </>
+
+        <div className="flex items-center gap-1">
+          <button 
+            onClick={() => setIsOpen(false)}
+            className="p-1.5 text-white/80 hover:text-white rounded-full hover:bg-white/10 transition-colors"
+            title="Minimize"
+          >
+            <Minimize2 size={18} />
+          </button>
+          <button 
+            onClick={() => setIsOpen(false)}
+            className="p-1.5 text-white/80 hover:text-white rounded-full hover:bg-white/10 transition-colors"
+            title="Close"
+          >
+            <X size={18} />
+          </button>
+        </div>
+      </div>
+
+      {/* Messages Body */}
+      <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50/50 dark:bg-gray-900/50 text-xs custom-scrollbar">
+        {messages.map(msg => (
+          <div
+            key={msg.id}
+            className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
+          >
+            <div
+              className={`max-w-[85%] p-3.5 rounded-2xl leading-relaxed ${
+                msg.sender === 'user'
+                  ? 'bg-hospital-600 text-white rounded-br-none shadow-sm'
+                  : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700/80 rounded-bl-none shadow-sm'
+              }`}
+            >
+              <p className="whitespace-pre-line">{msg.text}</p>
+
+              {/* Quick Action Buttons attached to AI Message */}
+              {msg.quickActions && msg.quickActions.length > 0 && (
+                <div className="mt-2.5 pt-2 border-t border-gray-100 dark:border-gray-700/60 flex flex-col gap-1.5">
+                  {msg.quickActions.map((act, i) => (
+                    <a
+                      key={i}
+                      href={act.route}
+                      className="bg-hospital-50 dark:bg-hospital-900/40 text-hospital-700 dark:text-hospital-300 hover:bg-hospital-100 px-3 py-1.5 rounded-xl font-bold transition-all text-[11px] flex items-center justify-between border border-hospital-200 dark:border-hospital-800"
+                    >
+                      <span>{act.label}</span>
+                      <ChevronDown size={14} className="-rotate-90 text-hospital-500" />
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+            <span className="text-[10px] text-gray-400 mt-1 px-1">{msg.timestamp}</span>
+          </div>
+        ))}
+
+        {isTyping && (
+          <div className="flex items-center gap-2 text-gray-400 text-xs bg-white dark:bg-gray-800 p-3 rounded-2xl w-fit border border-gray-200 dark:border-gray-700">
+            <Bot size={16} className="animate-spin text-hospital-500" />
+            <span>NIVORA AI is thinking...</span>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Prompt Suggestion Chips */}
+      <div className="px-3 py-2 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-800 flex gap-1.5 overflow-x-auto custom-scrollbar shrink-0">
+        {QUICK_SUGGESTIONS.map((item, i) => (
+          <button
+            key={i}
+            onClick={() => handleSend(item.prompt)}
+            className="whitespace-nowrap px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-hospital-50 hover:text-hospital-600 text-[10px] font-medium text-gray-600 dark:text-gray-300 transition-all shrink-0"
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Input Bar */}
+      <div className="p-3 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 flex items-center gap-2">
+        <input
+          type="text"
+          placeholder="Ask NIVORA AI about symptoms, OPD tokens, lab reports..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+          className="flex-1 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white text-xs px-3.5 py-2.5 rounded-xl border border-transparent focus:border-hospital-500 outline-none transition-all"
+        />
+        <button
+          onClick={() => handleSend()}
+          disabled={!input.trim()}
+          className="bg-hospital-600 hover:bg-hospital-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 text-white p-2.5 rounded-xl transition-all shadow-md shrink-0"
+        >
+          <Send size={16} />
+        </button>
+      </div>
+
+    </div>
   );
 }
