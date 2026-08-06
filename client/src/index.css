@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/* ================================================
+   NIVORA AI — Custom Theme (Tailwind v4)
+   ================================================ */
+
+@theme {
+  /* Hospital brand colors */
+  --color-hospital-50: #f0f9ff;
+  --color-hospital-100: #e0f2fe;
+  --color-hospital-200: #bae6fd;
+  --color-hospital-300: #7dd3fc;
+  --color-hospital-400: #38bdf8;
+  --color-hospital-500: #0ea5e9;
+  --color-hospital-600: #0284c7;
+  --color-hospital-700: #0369a1;
+  --color-hospital-800: #075985;
+  --color-hospital-900: #0c4a6e;
+
+  /* Animation */
+  --animate-fade-in: fade-in 0.5s ease-out;
+  --animate-slide-up: slide-up 0.4s ease-out;
+  --animate-zoom-in: zoom-in 0.3s ease-out;
+}
+
+/* Keyframes */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zoom-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ================================================
+   Base Styles
+   ================================================ */
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: #334155;
+  }
+}
+
+/* ================================================
+   Utility Classes for Animations
+   ================================================ */
+
+@utility animate-in {
+  animation: fade-in 0.5s ease-out, slide-up 0.4s ease-out;
+}
+
+@utility animate-zoom {
+  animation: zoom-in 0.3s ease-out;
+}
