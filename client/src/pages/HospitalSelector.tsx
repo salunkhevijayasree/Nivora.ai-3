@@ -44,12 +44,14 @@ export default function HospitalSelector() {
       {/* Header Banner */}
       <div className="bg-gradient-to-r from-hospital-700 via-hospital-800 to-indigo-900 rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative overflow-hidden space-y-3">
         <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-3.5 py-1 rounded-full text-xs font-semibold mb-2">
-            <Bot size={14} className="text-hospital-300" /> NIVORA AI Smart Network
+          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-white px-3.5 py-1 rounded-full text-xs font-bold mb-2 tracking-wide">
+            <Bot size={14} className="text-hospital-300" /> NIVORA AI
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">Select Partner Hospital</h1>
-          <p className="text-hospital-100 max-w-xl text-xs sm:text-sm leading-relaxed">
-            NIVORA AI powers workflow automation across top partner hospital networks. Choose a hospital near your current location to book appointments, track live queue, and access medical records.
+          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+            AI Powered Hospital Workflow Automation
+          </h1>
+          <p className="text-hospital-100 max-w-xl text-sm font-medium leading-relaxed pt-1">
+            "Personalized Guidance for Every Patient"
           </p>
         </div>
         <div className="absolute right-0 top-0 w-72 h-72 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
