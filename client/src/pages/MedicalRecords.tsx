@@ -169,7 +169,7 @@ export default function MedicalRecords() {
             <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-700/50 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
               <div>
                 <span className="text-gray-400 font-medium block">Patient Name</span>
-                <span className="font-semibold text-gray-800 dark:text-gray-200">RENU SHARMA</span>
+                <span className="font-semibold text-gray-800 dark:text-gray-200">Puja Sharma</span>
               </div>
               <div>
                 <span className="text-gray-400 font-medium block">Patient ID</span>

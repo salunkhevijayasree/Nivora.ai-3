@@ -35,7 +35,7 @@ export default function AIChatbotWidget() {
     {
       id: '1',
       sender: 'ai',
-      text: `Hello Renu Sharma! 👋 I am your NIVORA AI Health & Hospital Assistant${selectedHospital ? ` for ${selectedHospital.name}` : ''}. How can I assist you with doctor booking, queue tracking, lab reports, or symptom triage today?`,
+      text: `Hello Puja Sharma! 👋 I am your NIVORA AI Health & Hospital Assistant${selectedHospital ? ` for ${selectedHospital.name}` : ''}. How can I assist you with doctor booking, queue tracking, lab reports, or symptom triage today?`,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);

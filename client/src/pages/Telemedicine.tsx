@@ -244,7 +244,7 @@ export default function Telemedicine() {
           </div>
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">Daily Health & Nutrition Guide</h1>
           <p className="text-emerald-100 max-w-xl text-xs sm:text-sm leading-relaxed">
-            Practical daily meal schedules, warm water hydration, infection prevention, and balanced diet plans for Renu Sharma and family.
+            Practical daily meal schedules, warm water hydration, infection prevention, and balanced diet plans for Puja Sharma and family.
           </p>
         </div>
         <div className="absolute right-0 top-0 w-72 h-72 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>

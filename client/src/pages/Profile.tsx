@@ -23,7 +23,7 @@ interface FamilyMember {
 }
 
 const INITIAL_FAMILY: FamilyMember[] = [
-  { id: 1, name: 'Renu Sharma', relation: 'Self (Primary)', age: 34, patientCode: 'MED-29834', abhaId: '91-9876-5432-1098', isPrimary: true },
+  { id: 1, name: 'Puja Sharma', relation: 'Self (Primary)', age: 34, patientCode: 'MED-29834', abhaId: '91-9876-5432-1098', isPrimary: true },
   { id: 2, name: 'William Sharma', relation: 'Husband', age: 37, patientCode: 'MED-30112', abhaId: '91-8765-4321-0987' },
   { id: 3, name: 'Ram Prakash Sharma', relation: 'Father', age: 68, patientCode: 'MED-10492', abhaId: '91-7654-3210-9876' },
   { id: 4, name: 'Sunita Sharma', relation: 'Mother', age: 64, patientCode: 'MED-10493', abhaId: '91-6543-2109-8765' },

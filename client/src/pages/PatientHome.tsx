@@ -83,11 +83,11 @@ export default function PatientHome() {
               <Bot size={13} className="text-hospital-300" /> Powered by NIVORA AI Engine
             </span>
             <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 backdrop-blur-md px-3 py-0.5 rounded-full text-xs font-medium text-emerald-200">
-              <ShieldCheck size={13} /> Renu Sharma (ABHA ID: 91-xxxx-4321)
+              <ShieldCheck size={13} /> Puja Sharma (ABHA ID: 91-xxxx-4321)
             </span>
           </div>
 
-          <h1 className="text-2xl md:text-3xl font-bold mb-1">Welcome back, Renu Sharma! 👋</h1>
+          <h1 className="text-2xl md:text-3xl font-bold mb-1">Welcome back, Puja Sharma! 👋</h1>
           <p className="text-hospital-100 max-w-md text-xs sm:text-sm leading-relaxed">
             Encounter active at <strong className="text-white font-bold">{selectedHospital ? selectedHospital.name : 'Apollo Hospitals'}</strong>. Upcoming Cardiology check-up today at 2:30 PM (Token #42).
           </p>
