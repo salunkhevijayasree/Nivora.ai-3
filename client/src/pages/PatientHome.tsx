@@ -7,7 +7,7 @@ import {
   PhoneCall, 
   CreditCard, 
   Map, 
-  Stethoscope, 
+  HeartHandshake, 
   Building2, 
   MapPin, 
   RefreshCw, 
@@ -27,7 +27,7 @@ const gridItems = [
   { id: 'emergency-sos', title: 'Emergency SOS', icon: PhoneCall, color: 'bg-red-600', route: '/patient/sos', pulse: true },
   { id: 'bills-payments', title: 'Bills & Payments', icon: CreditCard, color: 'bg-amber-600', route: '/patient/billing' },
   { id: 'hospital-map', title: 'Hospital Map', icon: Map, color: 'bg-cyan-600', route: '/patient/map' },
-  { id: 'health-tips', title: 'Health Tips & AI', icon: Stethoscope, color: 'bg-rose-600', route: '/patient/telemedicine' },
+  { id: 'health-tips', title: 'Daily Health Tips', icon: HeartHandshake, color: 'bg-rose-600', route: '/patient/telemedicine' },
 ];
 
 export default function PatientHome() {
