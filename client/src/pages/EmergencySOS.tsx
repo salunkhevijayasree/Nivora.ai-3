@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PhoneCall, MapPin, Ambulance, TriangleAlert, LocateFixed } from 'lucide-react';
 import clsx from 'clsx';
 
 export default function EmergencySOS() {
   const [isSosActive, setIsSosActive] = useState(false);
   const [countdown, setCountdown] = useState(5);
-  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+  const [timerId, setTimerId] = useState<ReturnType<typeof setInterval> | null>(null);
 
   const triggerSOS = () => {
     setIsSosActive(true);

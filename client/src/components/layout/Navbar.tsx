@@ -1,11 +1,9 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Moon, Sun, Bell, UserCircle, Activity } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
-  const location = useLocation();
 
   return (
     <header className="sticky top-0 z-50 w-full backdrop-blur-lg bg-white/70 dark:bg-gray-900/70 border-b border-gray-200 dark:border-gray-800">

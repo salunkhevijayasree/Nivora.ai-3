@@ -1,4 +1,3 @@
-import React from 'react';
 import { UserCircle, Shield, Users, Settings, LogOut } from 'lucide-react';
 
 export default function Profile() {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Bot, Video, MessageSquare } from 'lucide-react';
 
 export default function Telemedicine() {

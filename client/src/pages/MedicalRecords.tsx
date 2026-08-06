@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FileText, Download, Eye, Microscope, Stethoscope, Clock, ShieldCheck } from 'lucide-react';
 
 const RECORDS = [

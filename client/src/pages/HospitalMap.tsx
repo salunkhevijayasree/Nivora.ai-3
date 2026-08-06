@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Map, Navigation2, Search } from 'lucide-react';
 
 export default function HospitalMap() {

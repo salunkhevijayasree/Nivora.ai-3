@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Calendar as CalendarIcon, Search, Clock, MapPin, Star, User } from 'lucide-react';
 import clsx from 'clsx';
 

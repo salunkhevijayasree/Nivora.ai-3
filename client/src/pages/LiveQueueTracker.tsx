@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Clock, Users, BellRing, MapPin } from 'lucide-react';
 
 export default function LiveQueueTracker() {
