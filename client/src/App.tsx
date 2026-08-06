@@ -23,7 +23,8 @@ function App() {
             <Navbar />
             <main className="max-w-5xl mx-auto p-4 pt-6">
               <Routes>
-                <Route path="/" element={<Navigate to="/patient" replace />} />
+                {/* Default route opens 1st Interface: Multi-Hospital Selection */}
+                <Route path="/" element={<Navigate to="/patient/hospitals" replace />} />
                 
                 {/* 1st Interface: Multi-Hospital Selection */}
                 <Route path="/patient/hospitals" element={<HospitalSelector />} />
