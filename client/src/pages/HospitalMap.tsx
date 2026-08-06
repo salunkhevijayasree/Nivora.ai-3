@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Search, 
   Navigation, 
@@ -6,7 +7,10 @@ import {
   Building2, 
   Activity, 
   Compass, 
-  Layers
+  Layers,
+  ArrowLeft,
+  Eye,
+  LayoutGrid
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useHospital } from '../context/HospitalContext';
@@ -20,55 +24,58 @@ interface Room {
   description: string;
   floor: number;
   badgeColor: string;
+  blueprintPosition: string; // e.g. "top-left", "center", etc.
 }
 
 const FLOORS = [
-  { level: 0, name: 'Ground Floor (GF)', subtitle: 'Reception, Emergency & Diagnostics' },
-  { level: 1, name: '1st Floor (1F)', subtitle: 'Dermatology, Eye & Pathology Lab' },
-  { level: 2, name: '2nd Floor (2F)', subtitle: 'Pediatrics, Gynecology & ENT' },
-  { level: 3, name: '3rd Floor (3F)', subtitle: 'Cardiology & Gastroenterology' },
-  { level: 4, name: '4th Floor (4F)', subtitle: 'Neurology, Pulmonology & ICU' },
-  { level: 5, name: '5th Floor (5F)', subtitle: 'Operation Theatres (OT) & Orthopedics' },
+  { level: 0, name: 'Ground Floor (GF)', subtitle: 'Reception, Emergency, Pharmacy & Ultrasound' },
+  { level: 1, name: '1st Floor (1F)', subtitle: 'Dermatology, Ophthalmology & Pathology Lab' },
+  { level: 2, name: '2nd Floor (2F)', subtitle: 'Pediatrics (Dr. Chen), Gynecology & ENT' },
+  { level: 3, name: '3rd Floor (3F)', subtitle: 'Cardiology (Dr. Smith) & Gastroenterology' },
+  { level: 4, name: '4th Floor (4F)', subtitle: 'Neurology (Dr. Wilson), Pulmonology & ICU' },
+  { level: 5, name: '5th Floor (5F)', subtitle: 'Operation Theatre (OT) & Orthopedics' },
 ];
 
 const ROOMS_DATA: Room[] = [
   // Ground Floor
-  { id: 'g1', roomNo: 'GF-01', name: 'Main Reception & Helpdesk', category: 'reception', description: 'Patient Token Counter, Registration & Admission Desk', floor: 0, badgeColor: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' },
-  { id: 'g2', roomNo: 'GF-ER', name: '24/7 Emergency & Trauma Bay', category: 'emergency', description: 'Immediate Critical Care, Triage & Ambulance Entrance', floor: 0, badgeColor: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' },
-  { id: 'g3', roomNo: 'GF-08', name: 'Ultrasound & Sonography Room', category: 'diagnostics', description: '3D/4D Color Doppler, Pelvic & Abdominal Scans', floor: 0, badgeColor: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' },
-  { id: 'g4', roomNo: 'GF-10', name: 'Digital X-Ray & MRI Scanner', category: 'diagnostics', description: 'High Resolution Radiography & 3T MRI Diagnostics', floor: 0, badgeColor: 'bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300' },
-  { id: 'g5', roomNo: 'GF-Pharma', name: 'Central Pharmacy & Billing', category: 'reception', description: '24/7 Medicine Dispensary & Outpatient Billing', floor: 0, badgeColor: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300' },
+  { id: 'g1', roomNo: 'GF-01', name: 'Main Reception & Helpdesk', category: 'reception', description: 'Patient Token Counter, Registration & Admission Desk', floor: 0, badgeColor: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300', blueprintPosition: 'col-span-2 bg-purple-50 dark:bg-purple-950/30 border-purple-300' },
+  { id: 'g2', roomNo: 'GF-ER', name: '24/7 Emergency & Trauma Bay', category: 'emergency', description: 'Immediate Critical Care, Triage & Ambulance Entrance', floor: 0, badgeColor: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300', blueprintPosition: 'col-span-2 bg-red-50 dark:bg-red-950/30 border-red-300' },
+  { id: 'g3', roomNo: 'GF-08', name: 'Ultrasound & Sonography Room', category: 'diagnostics', description: '3D/4D Color Doppler, Pelvic & Abdominal Scans', floor: 0, badgeColor: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300', blueprintPosition: 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300' },
+  { id: 'g4', roomNo: 'GF-10', name: 'Digital X-Ray & MRI Scanner', category: 'diagnostics', description: 'High Resolution Radiography & 3T MRI Diagnostics', floor: 0, badgeColor: 'bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300', blueprintPosition: 'bg-teal-50 dark:bg-teal-950/30 border-teal-300' },
+  { id: 'g5', roomNo: 'GF-Pharma', name: 'Central Pharmacy & Billing', category: 'reception', description: '24/7 Medicine Dispensary & Outpatient Billing', floor: 0, badgeColor: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300', blueprintPosition: 'col-span-2 bg-indigo-50 dark:bg-indigo-950/30 border-indigo-300' },
 
   // 1st Floor
-  { id: 'f1-1', roomNo: 'OPD 108', name: 'Dermatology & Skin Clinic', category: 'opd', doctor: 'Dr. Priya Sharma', description: 'Skin Consultation, Laser & Cosmetology Unit', floor: 1, badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' },
-  { id: 'f1-2', roomNo: 'OPD 115', name: 'Ophthalmology (Eye Clinic)', category: 'opd', doctor: 'Dr. Meera Iyer', description: 'Vision Testing, Retina & Cataract Diagnostics', floor: 1, badgeColor: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300' },
-  { id: 'f1-3', roomNo: 'Lab-101', name: 'Central Path Lab & Blood Collection', category: 'diagnostics', description: 'CBC, Lipid Profile, Thyroid & Urine Analysis', floor: 1, badgeColor: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' },
+  { id: 'f1-1', roomNo: 'OPD 108', name: 'Dermatology & Skin Clinic', category: 'opd', doctor: 'Dr. Priya Sharma', description: 'Skin Consultation, Laser & Cosmetology Unit', floor: 1, badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300', blueprintPosition: 'bg-blue-50 dark:bg-blue-950/30 border-blue-300' },
+  { id: 'f1-2', roomNo: 'OPD 115', name: 'Ophthalmology (Eye Clinic)', category: 'opd', doctor: 'Dr. Meera Iyer', description: 'Vision Testing, Retina & Cataract Diagnostics', floor: 1, badgeColor: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300', blueprintPosition: 'bg-cyan-50 dark:bg-cyan-950/30 border-cyan-300' },
+  { id: 'f1-3', roomNo: 'Lab-101', name: 'Central Path Lab & Blood Collection', category: 'diagnostics', description: 'CBC, Lipid Profile, Thyroid & Urine Analysis', floor: 1, badgeColor: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300', blueprintPosition: 'col-span-2 bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300' },
 
   // 2nd Floor
-  { id: 'f2-1', roomNo: 'OPD 201', name: 'Pediatrics & Child Care OPD', category: 'opd', doctor: 'Dr. Emily Chen', description: 'Child Health, Immunization & Neonatal Checkups', floor: 2, badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' },
-  { id: 'f2-2', roomNo: 'OPD 205', name: 'Gynecology & Maternity Clinic', category: 'opd', doctor: 'Dr. Ananya Roy', description: 'Antenatal Care, Ultrasound Monitoring & OB-GYN', floor: 2, badgeColor: 'bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300' },
-  { id: 'f2-3', roomNo: 'OPD 212', name: 'ENT Clinic (Ear, Nose, Throat)', category: 'opd', doctor: 'Dr. Suresh Kumar', description: 'Audiometry, Endoscopy & Sinus Treatment', floor: 2, badgeColor: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' },
+  { id: 'f2-1', roomNo: 'OPD 201', name: 'Pediatrics & Child Care OPD', category: 'opd', doctor: 'Dr. Emily Chen', description: 'Child Health, Immunization & Neonatal Checkups', floor: 2, badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300', blueprintPosition: 'col-span-2 bg-blue-50 dark:bg-blue-950/30 border-blue-300' },
+  { id: 'f2-2', roomNo: 'OPD 205', name: 'Gynecology & Maternity Clinic', category: 'opd', doctor: 'Dr. Ananya Roy', description: 'Antenatal Care, Ultrasound Monitoring & OB-GYN', floor: 2, badgeColor: 'bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300', blueprintPosition: 'bg-pink-50 dark:bg-pink-950/30 border-pink-300' },
+  { id: 'f2-3', roomNo: 'OPD 212', name: 'ENT Clinic (Ear, Nose, Throat)', category: 'opd', doctor: 'Dr. Suresh Kumar', description: 'Audiometry, Endoscopy & Sinus Treatment', floor: 2, badgeColor: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300', blueprintPosition: 'bg-amber-50 dark:bg-amber-950/30 border-amber-300' },
 
   // 3rd Floor
-  { id: 'f3-1', roomNo: 'OPD 304', name: 'Cardiology Consultation Room', category: 'opd', doctor: 'Dr. Sarah Smith', description: 'ECG, Echo, TMT & Coronary Heart Checkups', floor: 3, badgeColor: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300' },
-  { id: 'f3-2', roomNo: 'OPD 310', name: 'Gastroenterology Clinic', category: 'opd', doctor: 'Dr. Rajesh Gupta', description: 'Endoscopy, Liver & Digestive Health Unit', floor: 3, badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' },
-  { id: 'f3-3', roomNo: 'CCU-3', name: 'Cardiac Care Unit (CCU)', category: 'emergency', description: '24/7 Intensive Coronary Monitoring Ward', floor: 3, badgeColor: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' },
+  { id: 'f3-1', roomNo: 'OPD 304', name: 'Cardiology Consultation Room', category: 'opd', doctor: 'Dr. Sarah Smith', description: 'ECG, Echo, TMT & Coronary Heart Checkups', floor: 3, badgeColor: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300', blueprintPosition: 'col-span-2 bg-rose-50 dark:bg-rose-950/30 border-rose-300' },
+  { id: 'f3-2', roomNo: 'OPD 310', name: 'Gastroenterology Clinic', category: 'opd', doctor: 'Dr. Rajesh Gupta', description: 'Endoscopy, Liver & Digestive Health Unit', floor: 3, badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300', blueprintPosition: 'bg-blue-50 dark:bg-blue-950/30 border-blue-300' },
+  { id: 'f3-3', roomNo: 'CCU-3', name: 'Cardiac Care Unit (CCU)', category: 'emergency', description: '24/7 Intensive Coronary Monitoring Ward', floor: 3, badgeColor: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300', blueprintPosition: 'bg-red-50 dark:bg-red-950/30 border-red-300' },
 
   // 4th Floor
-  { id: 'f4-1', roomNo: 'OPD 412', name: 'Neurology Consultation Room', category: 'opd', doctor: 'Dr. James Wilson', description: 'EEG, Stroke Care, Brain & Nerve Evaluation', floor: 4, badgeColor: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300' },
-  { id: 'f4-2', roomNo: 'OPD 405', name: 'Pulmonology (Chest Clinic)', category: 'opd', doctor: 'Dr. Vikram Patel', description: 'Spirometry, Asthma & Lung Function Test', floor: 4, badgeColor: 'bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300' },
-  { id: 'f4-3', roomNo: 'ICU-Main', name: 'Intensive Care Unit (ICU)', category: 'emergency', description: '24/7 Ventilator Support & Critical Patient Bay', floor: 4, badgeColor: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' },
+  { id: 'f4-1', roomNo: 'OPD 412', name: 'Neurology Consultation Room', category: 'opd', doctor: 'Dr. James Wilson', description: 'EEG, Stroke Care, Brain & Nerve Evaluation', floor: 4, badgeColor: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300', blueprintPosition: 'col-span-2 bg-indigo-50 dark:bg-indigo-950/30 border-indigo-300' },
+  { id: 'f4-2', roomNo: 'OPD 405', name: 'Pulmonology (Chest Clinic)', category: 'opd', doctor: 'Dr. Vikram Patel', description: 'Spirometry, Asthma & Lung Function Test', floor: 4, badgeColor: 'bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300', blueprintPosition: 'bg-teal-50 dark:bg-teal-950/30 border-teal-300' },
+  { id: 'f4-3', roomNo: 'ICU-Main', name: 'Intensive Care Unit (ICU)', category: 'emergency', description: '24/7 Ventilator Support & Critical Patient Bay', floor: 4, badgeColor: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300', blueprintPosition: 'bg-red-50 dark:bg-red-950/30 border-red-300' },
 
   // 5th Floor
-  { id: 'f5-1', roomNo: 'OT Complex', name: 'Operation Theatre (OT 1 to OT 6)', category: 'surgery', description: 'Modular Robotic & Cardiac Surgery Theatres', floor: 5, badgeColor: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' },
-  { id: 'f5-2', roomNo: 'OPD 502', name: 'Orthopedics & Joint Clinic', category: 'opd', doctor: 'Dr. Michael Brown', description: 'Bone Fracture, Joint Replacement & Trauma', floor: 5, badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' },
+  { id: 'f5-1', roomNo: 'OT Complex', name: 'Operation Theatre (OT 1 to OT 6)', category: 'surgery', description: 'Modular Robotic & Cardiac Surgery Theatres', floor: 5, badgeColor: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300', blueprintPosition: 'col-span-2 bg-purple-50 dark:bg-purple-950/30 border-purple-300' },
+  { id: 'f5-2', roomNo: 'OPD 502', name: 'Orthopedics & Joint Clinic', category: 'opd', doctor: 'Dr. Michael Brown', description: 'Bone Fracture, Joint Replacement & Trauma', floor: 5, badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300', blueprintPosition: 'col-span-2 bg-blue-50 dark:bg-blue-950/30 border-blue-300' },
 ];
 
 export default function HospitalMap() {
+  const navigate = useNavigate();
   const { selectedHospital } = useHospital();
   const [activeFloor, setActiveFloor] = useState(0);
   const [search, setSearch] = useState('');
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(ROOMS_DATA[0]);
+  const [viewMode, setViewMode] = useState<'diagram' | 'grid'>('diagram');
 
   const floorRooms = ROOMS_DATA.filter(r => r.floor === activeFloor);
 
@@ -87,20 +94,58 @@ export default function HospitalMap() {
   return (
     <div className="space-y-6 animate-in pb-12">
       
+      {/* Back to Portal Bar */}
+      <div className="flex items-center justify-between">
+        <button 
+          onClick={() => navigate('/patient')}
+          className="text-xs font-bold text-hospital-600 hover:text-hospital-700 flex items-center gap-1.5 bg-white dark:bg-gray-800 px-3.5 py-2 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
+        >
+          <ArrowLeft size={16} /> Back to Hospital Services Portal
+        </button>
+
+        <div className="inline-flex items-center gap-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-3.5 py-1 rounded-full text-xs font-bold border border-emerald-200 dark:border-emerald-800">
+          <Building2 size={15} /> {selectedHospital ? selectedHospital.name : 'Apollo Hospitals'}
+        </div>
+      </div>
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
+          <span className="text-[10px] uppercase font-bold tracking-wider text-hospital-600 dark:text-hospital-400 block mb-1">
+            2nd Interface • Hospital Services Feature
+          </span>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <Compass className="text-hospital-600 animate-spin-slow" size={26} /> 
-            Hospital Floor Map & Navigation
+            {selectedHospital ? selectedHospital.name : 'Apollo Hospitals'} Floor Blueprint
           </h1>
-          <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
-            Interactive room directory for {selectedHospital ? selectedHospital.name : 'Apollo Hospitals'}. Find doctors, OPDs, Ultrasound, OT & Emergency rooms.
+          <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-0.5">
+            Locate Operation Theatre (OT), Reception, Ultrasound Room, ICU, and Specialist Doctor Rooms.
           </p>
         </div>
 
-        <div className="bg-hospital-50 dark:bg-hospital-900/30 text-hospital-700 dark:text-hospital-300 px-3.5 py-1.5 rounded-full text-xs font-bold border border-hospital-200 dark:border-hospital-800 flex items-center gap-2 w-fit">
-          <Building2 size={16} /> Campus: {selectedHospital ? selectedHospital.name : 'Apollo Hospitals'}
+        {/* View Mode Toggle */}
+        <div className="flex items-center gap-1 bg-gray-200 dark:bg-gray-700 p-1 rounded-xl w-fit">
+          <button
+            onClick={() => setViewMode('diagram')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
+              viewMode === 'diagram' 
+                ? 'bg-white dark:bg-gray-800 text-hospital-600 shadow-sm' 
+                : 'text-gray-600 dark:text-gray-300 hover:text-gray-900'
+            }`}
+          >
+            <Eye size={14} /> Blueprint Diagram
+          </button>
+
+          <button
+            onClick={() => setViewMode('grid')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
+              viewMode === 'grid' 
+                ? 'bg-white dark:bg-gray-800 text-hospital-600 shadow-sm' 
+                : 'text-gray-600 dark:text-gray-300 hover:text-gray-900'
+            }`}
+          >
+            <LayoutGrid size={14} /> List View
+          </button>
         </div>
       </div>
 
@@ -109,13 +154,13 @@ export default function HospitalMap() {
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
         <input 
           type="text"
-          placeholder="Search for room (e.g. 'Ultrasound', 'Operation Theatre', 'Cardiology', 'Dr. Sarah Smith', 'OPD 304')..."
+          placeholder="Search location (e.g. 'Ultrasound', 'Operation Theatre', 'Reception', 'Cardiology', 'Dr. Sarah Smith', 'OPD 304')..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:ring-2 focus:ring-hospital-500 outline-none transition-all dark:text-white shadow-sm"
         />
 
-        {/* Realtime Search Results Overlay Dropdown */}
+        {/* Search Results Dropdown */}
         {searchResults.length > 0 && (
           <div className="absolute left-0 right-0 top-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl z-30 max-h-60 overflow-y-auto p-2 space-y-1 custom-scrollbar">
             {searchResults.map(room => (
@@ -162,7 +207,9 @@ export default function HospitalMap() {
       {/* Active Floor Banner */}
       <div className="bg-gradient-to-r from-hospital-700 to-indigo-800 p-4 rounded-2xl text-white flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-md">
         <div>
-          <span className="text-[10px] uppercase tracking-wider font-bold text-hospital-200">Active Floor Blueprint</span>
+          <span className="text-[10px] uppercase tracking-wider font-bold text-hospital-200">
+            {selectedHospital ? selectedHospital.name : 'Apollo Hospitals'} • Interactive Map
+          </span>
           <h2 className="text-lg font-bold">{FLOORS[activeFloor].name}</h2>
           <p className="text-xs text-hospital-100">{FLOORS[activeFloor].subtitle}</p>
         </div>
@@ -175,56 +222,116 @@ export default function HospitalMap() {
       {/* Interactive Blueprint Map Grid + Room Detail Panel */}
       <div className="grid md:grid-cols-12 gap-6">
         
-        {/* Visual Map Blueprint Rooms Grid (7 cols) */}
+        {/* Visual Map Blueprint Diagram (7 cols) */}
         <div className="md:col-span-7 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-5 shadow-sm space-y-4">
           <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-3">
             <h3 className="font-bold text-gray-900 dark:text-white text-sm flex items-center gap-2">
-              <MapPin size={18} className="text-hospital-600" /> Floor Rooms Layout
+              <MapPin size={18} className="text-hospital-600" /> 
+              {viewMode === 'diagram' ? 'Architectural Floor Blueprint Diagram' : 'Floor Rooms Directory'}
             </h3>
-            <span className="text-xs text-gray-400">{floorRooms.length} Locations Available</span>
+            <span className="text-xs text-gray-400">{floorRooms.length} Locations on this floor</span>
           </div>
 
-          {/* Rooms Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {floorRooms.map(room => {
-              const isSelected = selectedRoom?.id === room.id;
-              return (
-                <div
-                  key={room.id}
-                  onClick={() => setSelectedRoom(room)}
-                  className={clsx(
-                    "p-4 rounded-2xl border transition-all cursor-pointer space-y-2 group relative overflow-hidden",
-                    isSelected 
-                      ? "border-hospital-500 bg-hospital-50/70 dark:bg-hospital-900/30 ring-2 ring-hospital-500/50 shadow-md" 
-                      : "border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/40 hover:border-hospital-300 hover:bg-white dark:hover:bg-gray-800"
-                  )}
-                >
-                  <div className="flex justify-between items-start">
-                    <span className="font-mono text-xs font-black px-2.5 py-1 rounded-lg bg-gray-900 text-white shadow-sm">
-                      {room.roomNo}
-                    </span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${room.badgeColor}`}>
-                      {room.category.toUpperCase()}
-                    </span>
-                  </div>
+          {viewMode === 'diagram' ? (
+            /* Visual Floorplan Graphic Diagram */
+            <div className="bg-gray-900 rounded-2xl p-4 border border-gray-800 space-y-3 relative overflow-hidden shadow-inner">
+              <div className="flex justify-between items-center text-[10px] font-mono text-gray-400 border-b border-gray-800 pb-2">
+                <span>[NORTH WING - LIFT LOBBY {activeFloor}F]</span>
+                <span className="text-emerald-400 animate-pulse">● LIVE WAYFINDER ACTIVE</span>
+              </div>
 
-                  <div>
-                    <h4 className="font-bold text-gray-900 dark:text-white text-sm group-hover:text-hospital-600 transition-colors">
-                      {room.name}
-                    </h4>
-                    {room.doctor && (
-                      <p className="text-xs font-semibold text-hospital-600 dark:text-hospital-400 pt-0.5">
-                        👨‍⚕️ {room.doctor}
-                      </p>
+              {/* Graphic Floor Plan Grid Blocks */}
+              <div className="grid grid-cols-2 gap-3 min-h-[260px] p-2">
+                {floorRooms.map(room => {
+                  const isSelected = selectedRoom?.id === room.id;
+                  return (
+                    <div
+                      key={room.id}
+                      onClick={() => setSelectedRoom(room)}
+                      className={clsx(
+                        "p-3.5 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between relative group hover:scale-[1.02]",
+                        room.blueprintPosition,
+                        isSelected
+                          ? "border-amber-400 ring-2 ring-amber-400/50 shadow-lg shadow-amber-500/20"
+                          : "hover:border-white/50"
+                      )}
+                    >
+                      <div className="flex justify-between items-start">
+                        <span className="font-mono text-[11px] font-black px-2 py-0.5 rounded bg-gray-900/80 text-white border border-white/20">
+                          {room.roomNo}
+                        </span>
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-gray-700 dark:text-gray-200 bg-white/40 px-2 py-0.5 rounded-full">
+                          {room.category}
+                        </span>
+                      </div>
+
+                      <div className="my-2">
+                        <h4 className="font-bold text-gray-900 dark:text-white text-xs group-hover:text-hospital-600 transition-colors">
+                          {room.name}
+                        </h4>
+                        {room.doctor && (
+                          <p className="text-[10px] font-semibold text-hospital-700 dark:text-hospital-300">
+                            👨‍⚕️ {room.doctor}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="text-[9px] text-gray-500 flex items-center justify-between border-t border-black/10 dark:border-white/10 pt-1">
+                        <span>Click to view details</span>
+                        {isSelected && <span className="text-amber-500 font-bold">★ Selected</span>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="text-center text-[10px] text-gray-500 font-mono pt-1">
+                [SOUTH WING CORRIDOR • ELEVATORS & FIRE EXIT]
+              </div>
+            </div>
+          ) : (
+            /* List Grid Mode */
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {floorRooms.map(room => {
+                const isSelected = selectedRoom?.id === room.id;
+                return (
+                  <div
+                    key={room.id}
+                    onClick={() => setSelectedRoom(room)}
+                    className={clsx(
+                      "p-4 rounded-2xl border transition-all cursor-pointer space-y-2 group relative overflow-hidden",
+                      isSelected 
+                        ? "border-hospital-500 bg-hospital-50/70 dark:bg-hospital-900/30 ring-2 ring-hospital-500/50 shadow-md" 
+                        : "border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/40 hover:border-hospital-300 hover:bg-white dark:hover:bg-gray-800"
                     )}
-                    <p className="text-[11px] text-gray-500 line-clamp-2 mt-1">
-                      {room.description}
-                    </p>
+                  >
+                    <div className="flex justify-between items-start">
+                      <span className="font-mono text-xs font-black px-2.5 py-1 rounded-lg bg-gray-900 text-white shadow-sm">
+                        {room.roomNo}
+                      </span>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${room.badgeColor}`}>
+                        {room.category.toUpperCase()}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h4 className="font-bold text-gray-900 dark:text-white text-sm group-hover:text-hospital-600 transition-colors">
+                        {room.name}
+                      </h4>
+                      {room.doctor && (
+                        <p className="text-xs font-semibold text-hospital-600 dark:text-hospital-400 pt-0.5">
+                          👨‍⚕️ {room.doctor}
+                        </p>
+                      )}
+                      <p className="text-[11px] text-gray-500 line-clamp-2 mt-1">
+                        {room.description}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Selected Room Detail & Navigation Guide (5 cols) */}
@@ -264,7 +371,7 @@ export default function HospitalMap() {
                 {/* Turn-by-Turn Navigation Guide */}
                 <div className="space-y-2 text-xs">
                   <span className="font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
-                    <Navigation size={15} className="text-hospital-600" /> Step-by-Step Wayfinding Guide
+                    <Navigation size={15} className="text-hospital-600" /> Turn-by-Turn Directions
                   </span>
                   
                   <div className="bg-gradient-to-r from-hospital-50 to-indigo-50 dark:from-gray-900/60 dark:to-gray-800/60 p-3.5 rounded-2xl border border-hospital-100 dark:border-hospital-900/50 space-y-2">
@@ -291,8 +398,8 @@ export default function HospitalMap() {
             ) : (
               <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-gray-400 text-center p-4">
                 <Compass size={48} className="mb-4 opacity-40 text-hospital-500 animate-spin-slow" />
-                <p className="font-medium text-sm text-gray-600 dark:text-gray-300">Select a room on the floor layout</p>
-                <p className="text-xs text-gray-400 mt-1">Click any room card or search to view turn-by-turn navigation instructions.</p>
+                <p className="font-medium text-sm text-gray-600 dark:text-gray-300">Select a room on the blueprint</p>
+                <p className="text-xs text-gray-400 mt-1">Click any room block or search to view turn-by-turn navigation instructions.</p>
               </div>
             )}
           </div>
