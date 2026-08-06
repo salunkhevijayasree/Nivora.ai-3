@@ -35,14 +35,6 @@ export default function PatientHome() {
         <div className="relative z-10">
           <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome back, Sarah! 👋</h1>
           <p className="text-hospital-100 max-w-md">Your upcoming appointment with Dr. Smith is today at 2:30 PM. Token #42.</p>
-          <div className="mt-4 flex gap-3">
-            <button 
-              onClick={() => navigate('/patient/queue')}
-              className="bg-white text-hospital-700 px-4 py-2 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors shadow-sm"
-            >
-              Track Live Queue
-            </button>
-          </div>
         </div>
         <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
       </div>
