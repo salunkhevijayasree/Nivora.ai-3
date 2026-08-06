@@ -7,8 +7,7 @@ import {
   PhoneCall, 
   CreditCard, 
   Map, 
-  Stethoscope, 
-  UserCircle 
+  Stethoscope 
 } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -21,7 +20,6 @@ const gridItems = [
   { id: 'bills-payments', title: 'Bills & Payments', icon: CreditCard, color: 'bg-amber-600', route: '/patient/billing' },
   { id: 'hospital-map', title: 'Hospital Map', icon: Map, color: 'bg-cyan-600', route: '/patient/map' },
   { id: 'health-tips', title: 'Health Tips & AI', icon: Stethoscope, color: 'bg-rose-600', route: '/patient/telemedicine' },
-  { id: 'profile', title: 'Profile & ABHA', icon: UserCircle, color: 'bg-slate-600', route: '/patient/profile' },
 ];
 
 export default function PatientHome() {
@@ -33,7 +31,7 @@ export default function PatientHome() {
       {/* Welcome Banner */}
       <div className="bg-gradient-to-r from-hospital-600 to-hospital-800 rounded-2xl p-6 text-white shadow-xl shadow-hospital-900/20 relative overflow-hidden">
         <div className="relative z-10">
-          <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome back, RENU SHARMA! 👋</h1>
+          <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome back, Renu Sharma! 👋</h1>
           <p className="text-hospital-100 max-w-md">Your upcoming appointment with Dr. Smith is today at 2:30 PM. Token #42.</p>
         </div>
         <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
@@ -41,7 +39,7 @@ export default function PatientHome() {
 
       {/* Quick Action Grid */}
       <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mt-8 mb-4">Quick Access</h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 md:gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-4">
         {gridItems.map((item) => (
           <button
             key={item.id}
