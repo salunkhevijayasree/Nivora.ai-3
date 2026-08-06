@@ -2,7 +2,7 @@ import { CreditCard, FileText, CheckCircle2 } from 'lucide-react';
 
 export default function Billing() {
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-6 animate-in">
       <div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Bills & Payments</h1>
         <p className="text-gray-500">Manage your hospital bills and view payment history.</p>
@@ -14,15 +14,15 @@ export default function Billing() {
           <span className="bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 px-3 py-1 rounded-full text-xs font-bold">Unpaid</span>
         </div>
         
-        <div className="text-4xl font-black text-gray-900 dark:text-white mb-6">$145.00</div>
+        <div className="text-4xl font-black text-gray-900 dark:text-white mb-6">₹1,450.00</div>
         
         <div className="space-y-3 text-sm text-gray-600 dark:text-gray-400 border-t border-gray-100 dark:border-gray-700 pt-4 mb-6">
-          <div className="flex justify-between"><span>Consultation (Dr. Smith)</span><span>$100.00</span></div>
-          <div className="flex justify-between"><span>Lab Tests (CBC)</span><span>$45.00</span></div>
+          <div className="flex justify-between"><span>Consultation (Dr. Smith)</span><span>₹1,000.00</span></div>
+          <div className="flex justify-between"><span>Lab Tests (CBC)</span><span>₹450.00</span></div>
         </div>
 
         <button className="w-full bg-hospital-600 hover:bg-hospital-700 text-white py-3 rounded-xl font-bold transition-colors flex items-center justify-center gap-2">
-          <CreditCard size={20} /> Pay Now
+          <CreditCard size={20} /> Pay Now (UPI / NetBanking / Cards)
         </button>
       </div>
 
@@ -38,7 +38,7 @@ export default function Billing() {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <span className="font-bold text-gray-900 dark:text-white">$120.00</span>
+              <span className="font-bold text-gray-900 dark:text-white">₹1,200.00</span>
               <button className="text-hospital-600 hover:text-hospital-700 bg-hospital-50 dark:bg-hospital-900/20 p-2 rounded-lg"><FileText size={18}/></button>
             </div>
           </div>

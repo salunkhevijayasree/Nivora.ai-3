@@ -30,14 +30,14 @@ interface Medicine {
 }
 
 const MEDICINES: Medicine[] = [
-  { id: 1, name: 'Amoxicillin 500mg', category: 'Antibiotic', instructions: '1 capsule after breakfast & dinner', timing: '8:00 AM & 8:00 PM', pillsLeft: 10, totalPills: 14, refillNeeded: false, price: 12.50, doctor: 'Dr. Emily Chen', color: 'text-purple-500', iconBg: 'bg-purple-50 dark:bg-purple-900/20' },
-  { id: 2, name: 'Lisinopril 10mg', category: 'Blood Pressure', instructions: '1 tablet in the morning with water', timing: '8:00 AM Daily', pillsLeft: 3, totalPills: 30, refillNeeded: true, price: 18.00, doctor: 'Dr. Sarah Smith', color: 'text-amber-500', iconBg: 'bg-amber-50 dark:bg-amber-900/20' },
-  { id: 3, name: 'Metformin 500mg', category: 'Diabetes Care', instructions: '1 tablet with meals twice daily', timing: '9:00 AM & 7:00 PM', pillsLeft: 4, totalPills: 60, refillNeeded: true, price: 22.00, doctor: 'Dr. James Wilson', color: 'text-blue-500', iconBg: 'bg-blue-50 dark:bg-blue-900/20' },
-  { id: 4, name: 'Atorvastatin 20mg', category: 'Cholesterol Care', instructions: '1 tablet at bedtime', timing: '9:30 PM Daily', pillsLeft: 22, totalPills: 30, refillNeeded: false, price: 15.00, doctor: 'Dr. Sarah Smith', color: 'text-indigo-500', iconBg: 'bg-indigo-50 dark:bg-indigo-900/20' },
-  { id: 5, name: 'Omeprazole 20mg', category: 'Gastric Care', instructions: '1 capsule 30 mins before breakfast', timing: '7:30 AM Daily', pillsLeft: 18, totalPills: 28, refillNeeded: false, price: 14.20, doctor: 'Dr. Emily Chen', color: 'text-teal-500', iconBg: 'bg-teal-50 dark:bg-teal-900/20' },
-  { id: 6, name: 'Montelukast 10mg', category: 'Asthma & Allergy', instructions: '1 tablet in the evening', timing: '7:00 PM Daily', pillsLeft: 5, totalPills: 30, refillNeeded: true, price: 19.50, doctor: 'Dr. James Wilson', color: 'text-rose-500', iconBg: 'bg-rose-50 dark:bg-rose-900/20' },
-  { id: 7, name: 'Vitamin D3 60,000 IU', category: 'Supplements', instructions: '1 capsule weekly with warm milk', timing: 'Sundays at 9:00 AM', pillsLeft: 6, totalPills: 8, refillNeeded: false, price: 9.00, doctor: 'Dr. Sarah Smith', color: 'text-emerald-500', iconBg: 'bg-emerald-50 dark:bg-emerald-900/20' },
-  { id: 8, name: 'Paracetamol 650mg', category: 'Pain Relief', instructions: '1 tablet as needed for body pain (Max 3/day)', timing: 'As Needed', pillsLeft: 12, totalPills: 15, refillNeeded: false, price: 6.50, doctor: 'Dr. Emily Chen', color: 'text-cyan-500', iconBg: 'bg-cyan-50 dark:bg-cyan-900/20' },
+  { id: 1, name: 'Amoxicillin 500mg', category: 'Antibiotic', instructions: '1 capsule after breakfast & dinner', timing: '8:00 AM & 8:00 PM', pillsLeft: 10, totalPills: 14, refillNeeded: false, price: 125.00, doctor: 'Dr. Emily Chen', color: 'text-purple-500', iconBg: 'bg-purple-50 dark:bg-purple-900/20' },
+  { id: 2, name: 'Lisinopril 10mg', category: 'Blood Pressure', instructions: '1 tablet in the morning with water', timing: '8:00 AM Daily', pillsLeft: 3, totalPills: 30, refillNeeded: true, price: 180.00, doctor: 'Dr. Sarah Smith', color: 'text-amber-500', iconBg: 'bg-amber-50 dark:bg-amber-900/20' },
+  { id: 3, name: 'Metformin 500mg', category: 'Diabetes Care', instructions: '1 tablet with meals twice daily', timing: '9:00 AM & 7:00 PM', pillsLeft: 4, totalPills: 60, refillNeeded: true, price: 220.00, doctor: 'Dr. James Wilson', color: 'text-blue-500', iconBg: 'bg-blue-50 dark:bg-blue-900/20' },
+  { id: 4, name: 'Atorvastatin 20mg', category: 'Cholesterol Care', instructions: '1 tablet at bedtime', timing: '9:30 PM Daily', pillsLeft: 22, totalPills: 30, refillNeeded: false, price: 150.00, doctor: 'Dr. Sarah Smith', color: 'text-indigo-500', iconBg: 'bg-indigo-50 dark:bg-indigo-900/20' },
+  { id: 5, name: 'Omeprazole 20mg', category: 'Gastric Care', instructions: '1 capsule 30 mins before breakfast', timing: '7:30 AM Daily', pillsLeft: 18, totalPills: 28, refillNeeded: false, price: 142.00, doctor: 'Dr. Emily Chen', color: 'text-teal-500', iconBg: 'bg-teal-50 dark:bg-teal-900/20' },
+  { id: 6, name: 'Montelukast 10mg', category: 'Asthma & Allergy', instructions: '1 tablet in the evening', timing: '7:00 PM Daily', pillsLeft: 5, totalPills: 30, refillNeeded: true, price: 195.00, doctor: 'Dr. James Wilson', color: 'text-rose-500', iconBg: 'bg-rose-50 dark:bg-rose-900/20' },
+  { id: 7, name: 'Vitamin D3 60,000 IU', category: 'Supplements', instructions: '1 capsule weekly with warm milk', timing: 'Sundays at 9:00 AM', pillsLeft: 6, totalPills: 8, refillNeeded: false, price: 90.00, doctor: 'Dr. Sarah Smith', color: 'text-emerald-500', iconBg: 'bg-emerald-50 dark:bg-emerald-900/20' },
+  { id: 8, name: 'Paracetamol 650mg', category: 'Pain Relief', instructions: '1 tablet as needed for body pain (Max 3/day)', timing: 'As Needed', pillsLeft: 12, totalPills: 15, refillNeeded: false, price: 65.00, doctor: 'Dr. Emily Chen', color: 'text-cyan-500', iconBg: 'bg-cyan-50 dark:bg-cyan-900/20' },
 ];
 
 export default function PharmacyHub() {
@@ -213,7 +213,7 @@ export default function PharmacyHub() {
                 }`}
               >
                 <ShoppingCart size={15} /> 
-                {med.refillNeeded ? 'Refill Now ($' + med.price.toFixed(2) + ')' : 'Order Refill'}
+                {med.refillNeeded ? 'Refill Now (₹' + med.price.toFixed(2) + ')' : 'Order Refill'}
               </button>
             </div>
           </div>
@@ -274,7 +274,7 @@ export default function PharmacyHub() {
                       : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50'
                   }`}
                 >
-                  <Truck size={20} /> Home Delivery (+$2.50)
+                  <Truck size={20} /> Home Delivery (+₹50.00)
                 </button>
               </div>
             </div>
@@ -283,18 +283,18 @@ export default function PharmacyHub() {
             <div className="space-y-1.5 text-xs text-gray-500 border-t border-gray-100 dark:border-gray-800 pt-3">
               <div className="flex justify-between">
                 <span>Medicine Cost ({selectedMed.totalPills} pills):</span>
-                <span className="font-semibold text-gray-900 dark:text-white">${selectedMed.price.toFixed(2)}</span>
+                <span className="font-semibold text-gray-900 dark:text-white">₹{selectedMed.price.toFixed(2)}</span>
               </div>
               {deliveryType === 'delivery' && (
                 <div className="flex justify-between">
                   <span>Home Delivery Charge:</span>
-                  <span className="font-semibold text-gray-900 dark:text-white">$2.50</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">₹50.00</span>
                 </div>
               )}
               <div className="flex justify-between text-sm font-bold text-gray-900 dark:text-white pt-2 border-t border-gray-100 dark:border-gray-800">
                 <span>Total Amount:</span>
                 <span className="text-hospital-600 dark:text-hospital-400">
-                  ${(selectedMed.price + (deliveryType === 'delivery' ? 2.50 : 0)).toFixed(2)}
+                  ₹{(selectedMed.price + (deliveryType === 'delivery' ? 50.00 : 0)).toFixed(2)}
                 </span>
               </div>
             </div>

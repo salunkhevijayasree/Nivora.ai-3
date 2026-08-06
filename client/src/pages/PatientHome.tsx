@@ -33,7 +33,7 @@ export default function PatientHome() {
       {/* Welcome Banner */}
       <div className="bg-gradient-to-r from-hospital-600 to-hospital-800 rounded-2xl p-6 text-white shadow-xl shadow-hospital-900/20 relative overflow-hidden">
         <div className="relative z-10">
-          <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome back, Sarah! 👋</h1>
+          <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome back, RENU SHARMA! 👋</h1>
           <p className="text-hospital-100 max-w-md">Your upcoming appointment with Dr. Smith is today at 2:30 PM. Token #42.</p>
         </div>
         <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
