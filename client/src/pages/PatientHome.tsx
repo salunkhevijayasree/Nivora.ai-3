@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { 
   CalendarPlus, 
-  Search, 
+  Users, 
   FileText, 
   Microscope, 
   Pill, 
@@ -14,16 +14,16 @@ import {
 import clsx from 'clsx';
 
 const gridItems = [
-  { id: 'book-appointment', title: 'Book Appointment', icon: CalendarPlus, color: 'bg-blue-500', route: '/patient/appointments' },
-  { id: 'find-doctor', title: 'Find Doctor', icon: Search, color: 'bg-indigo-500', route: '/patient/appointments' },
-  { id: 'medical-records', title: 'My Medical Records', icon: FileText, color: 'bg-emerald-500', route: '/patient/records' },
-  { id: 'lab-reports', title: 'Lab Reports', icon: Microscope, color: 'bg-teal-500', route: '/patient/records' },
-  { id: 'medicines', title: 'Medicines', icon: Pill, color: 'bg-purple-500', route: '/patient/pharmacy' },
-  { id: 'emergency-sos', title: 'Emergency SOS', icon: PhoneCall, color: 'bg-red-500', route: '/patient/sos', pulse: true },
-  { id: 'bills-payments', title: 'Bills & Payments', icon: CreditCard, color: 'bg-amber-500', route: '/patient/billing' },
-  { id: 'hospital-map', title: 'Hospital Map', icon: Map, color: 'bg-cyan-500', route: '/patient/map' },
-  { id: 'health-tips', title: 'Health Tips', icon: Stethoscope, color: 'bg-rose-500', route: '/patient/telemedicine' }, // AI / Telemed
-  { id: 'profile', title: 'Profile', icon: UserCircle, color: 'bg-slate-500', route: '/patient/profile' },
+  { id: 'find-book-doctor', title: 'Find Doctor & Book', icon: CalendarPlus, color: 'bg-blue-600', route: '/patient/appointments' },
+  { id: 'live-queue', title: 'Live Queue Status', icon: Users, color: 'bg-indigo-600', route: '/patient/queue' },
+  { id: 'medical-records', title: 'My Medical Records', icon: FileText, color: 'bg-emerald-600', route: '/patient/records' },
+  { id: 'lab-reports', title: 'Lab Reports', icon: Microscope, color: 'bg-teal-600', route: '/patient/records' },
+  { id: 'medicines', title: 'Medicines', icon: Pill, color: 'bg-purple-600', route: '/patient/pharmacy' },
+  { id: 'emergency-sos', title: 'Emergency SOS', icon: PhoneCall, color: 'bg-red-600', route: '/patient/sos', pulse: true },
+  { id: 'bills-payments', title: 'Bills & Payments', icon: CreditCard, color: 'bg-amber-600', route: '/patient/billing' },
+  { id: 'hospital-map', title: 'Hospital Map', icon: Map, color: 'bg-cyan-600', route: '/patient/map' },
+  { id: 'health-tips', title: 'Health Tips & AI', icon: Stethoscope, color: 'bg-rose-600', route: '/patient/telemedicine' },
+  { id: 'profile', title: 'Profile & ABHA', icon: UserCircle, color: 'bg-slate-600', route: '/patient/profile' },
 ];
 
 export default function PatientHome() {
@@ -49,7 +49,7 @@ export default function PatientHome() {
         <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
       </div>
 
-      {/* Quick Action 10-Grid */}
+      {/* Quick Action Grid */}
       <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mt-8 mb-4">Quick Access</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
         {gridItems.map((item) => (
