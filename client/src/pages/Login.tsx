@@ -48,12 +48,12 @@ export default function Login() {
         identifier.replace(/\D/g, '').includes(validPhone);
 
       if (!matchesUser) {
-        setErrorMsg('❌ User not found. Please check your Email / ABHA ID or click Instant Demo Login.');
+        setErrorMsg('❌ User account not found. Please check your Email / ABHA ID and try again.');
         return;
       }
 
       if (password !== correctPassword) {
-        setErrorMsg('❌ Authentication Failed: Incorrect password entered! Correct Password is "Puja@123".');
+        setErrorMsg('❌ Authentication Failed: Incorrect password. Please try again.');
         return;
       }
     }
