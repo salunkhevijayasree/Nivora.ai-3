@@ -223,7 +223,7 @@ export default function AIChatbotWidget() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-          className="flex-1 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white text-xs px-3.5 py-2.5 rounded-xl border border-transparent focus:border-hospital-500 outline-none transition-all"
+          className="flex-1 bg-slate-800 text-white placeholder-slate-400 text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 focus:border-hospital-500 outline-none transition-all font-medium"
         />
         <button
           onClick={() => handleSend()}

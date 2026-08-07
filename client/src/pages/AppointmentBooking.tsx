@@ -92,7 +92,7 @@ export default function AppointmentBooking() {
           placeholder="Search by doctor name, specialty (e.g. Cardiology, Dermatology)..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-hospital-500 outline-none transition-all dark:text-white shadow-sm"
+          className="w-full pl-10 pr-4 py-3 rounded-2xl border border-slate-700 bg-slate-800 text-white placeholder-slate-400 focus:ring-2 focus:ring-hospital-500 outline-none transition-all shadow-sm font-medium"
         />
       </div>
 

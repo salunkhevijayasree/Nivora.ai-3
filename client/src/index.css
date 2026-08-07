@@ -64,6 +64,28 @@ html, body, #root {
     color: #f8fafc !important;
   }
 
+  /* Input & Typing Visibility Enforcement across all Browsers & Vercel */
+  input, select, textarea {
+    color: #ffffff !important;
+    caret-color: #38bdf8 !important;
+    background-color: #1e293b !important;
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: #94a3b8 !important;
+    opacity: 1 !important;
+  }
+
+  /* Browser Auto-fill Override for White/Yellow Flash */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #1e293b inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
   /* Scrollbar styling */
   ::-webkit-scrollbar {
     width: 6px;

@@ -279,7 +279,7 @@ export default function Login() {
                 value={identifier}
                 onChange={(e) => { setIdentifier(e.target.value); setErrorMsg(null); }}
                 placeholder="puja.sharma@nivora.ai or 91-9876-5432-1098"
-                className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl text-xs focus:ring-2 focus:ring-hospital-500 outline-none transition-all dark:text-white"
+                className="w-full pl-10 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-2xl text-xs text-white placeholder-slate-400 focus:ring-2 focus:ring-hospital-500 outline-none transition-all font-medium"
               />
             </div>
           </div>
@@ -292,7 +292,7 @@ export default function Login() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 98765 43210"
-                className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl px-4 py-3 text-xs focus:ring-2 focus:ring-hospital-500 outline-none transition-all dark:text-white"
+                className="w-full bg-slate-900 border border-slate-700 rounded-2xl px-4 py-3 text-xs text-white placeholder-slate-400 focus:ring-2 focus:ring-hospital-500 outline-none transition-all font-medium"
               />
             </div>
           )}
@@ -325,7 +325,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => { setPassword(e.target.value); setErrorMsg(null); }}
                 placeholder="Enter your password"
-                className="w-full pl-10 pr-10 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl text-xs focus:ring-2 focus:ring-hospital-500 outline-none transition-all dark:text-white font-mono"
+                className="w-full pl-10 pr-10 py-3 bg-slate-900 border border-slate-700 rounded-2xl text-xs text-white placeholder-slate-400 focus:ring-2 focus:ring-hospital-500 outline-none transition-all font-mono"
               />
               <button
                 type="button"

@@ -68,7 +68,7 @@ export default function HospitalSelector() {
           placeholder="Search partner hospital (Apollo, Yashoda, SevenHills, Care, Medicure)..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:ring-2 focus:ring-hospital-500 outline-none transition-all dark:text-white shadow-sm"
+          className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-slate-700 bg-slate-800 text-white text-sm focus:ring-2 focus:ring-hospital-500 outline-none transition-all placeholder-slate-400 shadow-sm font-medium"
         />
       </div>
 
