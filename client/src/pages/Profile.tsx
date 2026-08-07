@@ -31,11 +31,21 @@ const INITIAL_FAMILY: FamilyMember[] = [
   { id: 6, name: 'Ananya Sharma', relation: 'Daughter', age: 8, patientCode: 'MED-44911', abhaId: '91-4321-0987-6543' },
 ];
 
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
 export default function Profile() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>(INITIAL_FAMILY);
   const [activeProfile, setActiveProfile] = useState<FamilyMember>(INITIAL_FAMILY[0]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const handleSignOut = () => {
+    logout();
+    navigate('/login');
+  };
 
   // New Family Member Form State
   const [newName, setNewName] = useState('');
@@ -192,8 +202,11 @@ export default function Profile() {
               </div>
             </div>
 
-            <button className="w-full flex items-center justify-center gap-2 p-3 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl text-red-600 font-bold transition-colors text-xs border border-red-100 dark:border-red-900/30">
-              <LogOut size={16}/> Sign Out
+            <button 
+              onClick={handleSignOut}
+              className="w-full flex items-center justify-center gap-2 p-3 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl text-red-600 dark:text-red-400 font-bold transition-colors text-xs border border-red-200 dark:border-red-900/40 cursor-pointer"
+            >
+              <LogOut size={16}/> Sign Out of Nivora AI
             </button>
           </div>
         </div>
