@@ -11,8 +11,7 @@ import {
   Building2,
   Eye,
   EyeOff,
-  AlertCircle,
-  KeyRound
+  AlertCircle
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -137,23 +136,7 @@ export default function Login() {
           </button>
         </div>
 
-        {/* Demo Credentials Hint Badge */}
-        <div className="bg-hospital-50 dark:bg-hospital-950/40 border border-hospital-200 dark:border-hospital-800/80 rounded-2xl p-3 text-xs text-hospital-800 dark:text-hospital-300 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <KeyRound size={16} className="text-hospital-500 shrink-0" />
-            <div>
-              <span className="font-bold block">Demo Password Credentials</span>
-              <span className="text-[11px] text-gray-500 dark:text-gray-400">Password: <strong className="text-hospital-600 dark:text-hospital-400 font-mono">Puja@123</strong></span>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={() => { setIdentifier('puja.sharma@nivora.ai'); setPassword('Puja@123'); setErrorMsg(null); }}
-            className="text-[11px] font-bold text-hospital-600 dark:text-hospital-400 hover:underline bg-white dark:bg-gray-800 px-2.5 py-1 rounded-lg border border-hospital-300 dark:border-hospital-700 shrink-0"
-          >
-            Auto Fill
-          </button>
-        </div>
+
 
         {/* Error Alert Box */}
         {errorMsg && (
@@ -245,7 +228,7 @@ export default function Login() {
                 required
                 value={password}
                 onChange={(e) => { setPassword(e.target.value); setErrorMsg(null); }}
-                placeholder="Enter password (Puja@123)"
+                placeholder="Enter your password"
                 className="w-full pl-10 pr-10 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl text-xs focus:ring-2 focus:ring-hospital-500 outline-none transition-all dark:text-white font-mono"
               />
               <button
