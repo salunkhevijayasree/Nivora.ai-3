@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { 
-  Calendar as CalendarIcon, 
   Search, 
   Clock, 
   MapPin, 
@@ -11,7 +10,10 @@ import {
   IndianRupee, 
   X, 
   Video, 
-  Building2 
+  Building2,
+  Sun,
+  Sunrise,
+  Moon
 } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -44,12 +46,28 @@ const DOCTORS: Doctor[] = [
 
 const SPECIALTIES = ['All', 'Cardiology', 'Neurology', 'Pediatrics', 'Orthopedics', 'Dermatology', 'Gastroenterology', 'Gynecology', 'Pulmonology', 'ENT'];
 
-const TIME_SLOTS = ['09:00 AM', '10:30 AM', '11:15 AM', '02:00 PM', '03:45 PM', '04:30 PM'];
+const VISITING_DATES = [
+  { label: 'Today', date: 'Aug 07', day: 'Fri' },
+  { label: 'Tomorrow', date: 'Aug 08', day: 'Sat' },
+  { label: 'Day After', date: 'Aug 09', day: 'Sun' },
+];
+
+const TIME_SLOTS_DATA = [
+  { time: '09:00 AM', session: 'Morning', icon: Sunrise, color: 'bg-emerald-950/70 border-emerald-500/50 text-emerald-300 hover:border-emerald-400', badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30' },
+  { time: '10:30 AM', session: 'Morning', icon: Sunrise, color: 'bg-teal-950/70 border-teal-500/50 text-teal-300 hover:border-teal-400', badgeColor: 'bg-teal-500/20 text-teal-300 border-teal-400/30' },
+  { time: '11:45 AM', session: 'Morning', icon: Sunrise, color: 'bg-cyan-950/70 border-cyan-500/50 text-cyan-300 hover:border-cyan-400', badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-400/30' },
+  { time: '02:15 PM', session: 'Afternoon', icon: Sun, color: 'bg-amber-950/70 border-amber-500/50 text-amber-300 hover:border-amber-400', badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-400/30' },
+  { time: '03:45 PM', session: 'Afternoon', icon: Sun, color: 'bg-orange-950/70 border-orange-500/50 text-orange-300 hover:border-orange-400', badgeColor: 'bg-orange-500/20 text-orange-300 border-orange-400/30' },
+  { time: '05:30 PM', session: 'Evening', icon: Moon, color: 'bg-indigo-950/70 border-indigo-500/50 text-indigo-300 hover:border-indigo-400', badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-400/30' },
+  { time: '06:45 PM', session: 'Evening', icon: Moon, color: 'bg-purple-950/70 border-purple-500/50 text-purple-300 hover:border-purple-400', badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-400/30' },
+  { time: '07:30 PM', session: 'Evening', icon: Moon, color: 'bg-rose-950/70 border-rose-500/50 text-rose-300 hover:border-rose-400', badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-400/30' },
+];
 
 export default function AppointmentBooking() {
   const [search, setSearch] = useState('');
   const [selectedSpecialty, setSelectedSpecialty] = useState('All');
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(DOCTORS[0]);
+  const [selectedDate, setSelectedDate] = useState('Today - Aug 07');
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [consultationType, setConsultationType] = useState<'in-person' | 'video'>('in-person');
   const [bookingSuccessModal, setBookingSuccessModal] = useState<any | null>(null);
@@ -65,23 +83,25 @@ export default function AppointmentBooking() {
   const handleConfirmBooking = () => {
     if (!selectedDoctor || !selectedSlot) return;
 
-    const tokenNumber = Math.floor(35 + Math.random() * 20);
+    const tokenNumber = Math.floor(15 + Math.random() * 50);
+
     setBookingSuccessModal({
       doctor: selectedDoctor,
       slot: selectedSlot,
-      tokenNumber,
+      date: selectedDate,
       type: consultationType,
-      date: 'Aug 06, 2026'
+      tokenNumber,
+      bookingId: `NIV-${Math.floor(100000 + Math.random() * 900000)}`
     });
   };
 
   return (
-    <div className="space-y-6 animate-in relative">
+    <div className="space-y-6 animate-in">
       
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Find Doctor & Book Appointment</h1>
-        <p className="text-gray-500 dark:text-gray-400">Browse specialist doctors, check qualifications, and select available slots.</p>
+        <p className="text-gray-500 dark:text-gray-400">Browse specialist doctors, check qualifications, select visiting time slots, and receive instant OPD tokens.</p>
       </div>
 
       {/* Search Input */}
@@ -102,7 +122,7 @@ export default function AppointmentBooking() {
           <button
             key={spec}
             onClick={() => setSelectedSpecialty(spec)}
-            className={`whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold transition-all ${
+            className={`whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer ${
               selectedSpecialty === spec 
                 ? 'bg-hospital-600 text-white shadow-md' 
                 : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50'
@@ -113,19 +133,19 @@ export default function AppointmentBooking() {
         ))}
       </div>
 
-      {/* Main Grid: Doctor List + Booking Panel */}
-      <div className="grid md:grid-cols-12 gap-6">
+      {/* Two-Column Booking Layout */}
+      <div className="grid md:grid-cols-12 gap-6 items-start">
         
-        {/* Doctor List Column (7 cols) */}
+        {/* Left Column: Doctor Selection Cards (7 Cols) */}
         <div className="md:col-span-7 space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold text-gray-700 dark:text-gray-300 text-sm">
               Specialists ({filteredDoctors.length})
             </h2>
-            <span className="text-xs text-gray-400">Click a doctor to book</span>
+            <span className="text-xs text-gray-400">Click a doctor to select slot</span>
           </div>
 
-          <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1 custom-scrollbar">
+          <div className="space-y-3 max-h-[540px] overflow-y-auto pr-1 custom-scrollbar">
             {filteredDoctors.map(doctor => (
               <div 
                 key={doctor.id}
@@ -138,105 +158,164 @@ export default function AppointmentBooking() {
                 )}
               >
                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-sm shrink-0 ${doctor.avatarBg}`}>
-                  {doctor.name.split(' ')[1]?.[0]}{doctor.name.split(' ')[2]?.[0] || 'D'}
+                  {doctor.name.replace('Dr. ', '').split(' ').map(n => n[0]).join('')}
                 </div>
 
                 <div className="flex-1 space-y-1">
-                  <div className="flex justify-between items-start">
-                    <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-hospital-600 transition-colors text-base">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-bold text-gray-900 dark:text-white text-sm group-hover:text-hospital-600 transition-colors">
                       {doctor.name}
                     </h3>
-                    <div className="flex items-center text-xs font-semibold text-amber-500 bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded-md">
-                      <Star size={12} className="fill-current mr-1" />
-                      {doctor.rating} ({doctor.reviews})
-                    </div>
-                  </div>
-
-                  <p className="text-xs font-semibold text-hospital-600 dark:text-hospital-400">{doctor.specialty}</p>
-                  <p className="text-[11px] text-gray-500 flex items-center gap-1"><Award size={12}/> {doctor.qualification}</p>
-
-                  <div className="pt-2 flex items-center justify-between text-xs text-gray-500 border-t border-gray-100 dark:border-gray-700/50">
-                    <span className="flex items-center gap-1"><Clock size={12}/> {doctor.experience} Exp</span>
-                    <span className="flex items-center gap-1 font-bold text-gray-900 dark:text-white">
-                      <IndianRupee size={12} /> {doctor.fee}
+                    <span className="flex items-center gap-1 text-xs font-bold text-amber-500 bg-amber-50 dark:bg-amber-900/30 px-2 py-0.5 rounded-md border border-amber-200 dark:border-amber-800">
+                      <Star size={12} className="fill-current" /> {doctor.rating} ({doctor.reviews})
                     </span>
-                    <span className="flex items-center gap-1 text-[11px] text-gray-400"><MapPin size={12}/> {doctor.location}</span>
                   </div>
+
+                  <p className="text-xs font-medium text-hospital-600 dark:text-hospital-400">{doctor.specialty} • {doctor.qualification}</p>
+                  
+                  <div className="flex items-center gap-4 text-[11px] text-gray-500 dark:text-gray-400 pt-1">
+                    <span className="flex items-center gap-1"><Award size={12} className="text-gray-400"/> Exp: {doctor.experience}</span>
+                    <span className="flex items-center gap-1 font-bold text-emerald-600 dark:text-emerald-400"><IndianRupee size={12}/> ₹{doctor.fee} OPD Fee</span>
+                  </div>
+
+                  <p className="text-[11px] text-gray-400 flex items-center gap-1 pt-0.5">
+                    <MapPin size={11} className="text-hospital-400" /> {doctor.location}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Booking Slot Selection Column (5 cols) */}
-        <div className="md:col-span-5">
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-3xl p-6 shadow-sm sticky top-20 space-y-5">
+        {/* Right Column: Time Slot & Visiting Time Box (5 Cols) */}
+        <div className="md:col-span-5 space-y-4 sticky top-20">
+          <div className="bg-white dark:bg-gray-800/90 border border-gray-200 dark:border-gray-700 rounded-3xl p-5 shadow-xl space-y-4">
+            
             {selectedDoctor ? (
               <>
                 {/* Doctor Selected Banner */}
-                <div className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-700 pb-4">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-sm shrink-0 ${selectedDoctor.avatarBg}`}>
-                    <UserCheck size={24} />
+                <div className="flex items-center gap-3 border-b border-gray-100 dark:border-gray-700/60 pb-3">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 ${selectedDoctor.avatarBg}`}>
+                    {selectedDoctor.name.replace('Dr. ', '').split(' ').map(n => n[0]).join('')}
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 dark:text-white text-base">{selectedDoctor.name}</h3>
-                    <p className="text-xs text-hospital-600 dark:text-hospital-400 font-medium">{selectedDoctor.specialty} • ₹{selectedDoctor.fee}</p>
-                    <p className="text-[11px] text-gray-400">{selectedDoctor.location}</p>
+                    <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider block">Selected Doctor</span>
+                    <h3 className="font-extrabold text-sm text-gray-900 dark:text-white">{selectedDoctor.name}</h3>
+                    <p className="text-[11px] text-hospital-600 dark:text-hospital-400 font-medium">{selectedDoctor.specialty}</p>
+                  </div>
+                </div>
+
+                {/* Visiting Date Selector Pills */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center justify-between">
+                    <span>Visiting Date</span>
+                    <span className="text-[11px] text-hospital-400 font-medium">{selectedDate}</span>
+                  </label>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {VISITING_DATES.map(v => {
+                      const fullDate = `${v.label} - ${v.date}`;
+                      const isSel = selectedDate === fullDate;
+                      return (
+                        <button
+                          key={v.label}
+                          type="button"
+                          onClick={() => setSelectedDate(fullDate)}
+                          className={`p-2 rounded-xl text-[11px] font-bold text-center border transition-all cursor-pointer ${
+                            isSel 
+                              ? 'bg-hospital-600 text-white border-hospital-500 shadow-md'
+                              : 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-hospital-400'
+                          }`}
+                        >
+                          <span className="block text-[10px] opacity-80">{v.day}</span>
+                          <span>{v.label}</span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
                 {/* Consultation Type Selector */}
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold text-gray-700 dark:text-gray-300 block">Consultation Type</label>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Consultation Type</label>
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       onClick={() => setConsultationType('in-person')}
                       className={clsx(
-                        "py-2 px-3 rounded-xl border text-xs font-medium flex items-center justify-center gap-2 transition-all",
+                        "py-2 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer",
                         consultationType === 'in-person'
-                          ? "border-hospital-500 bg-hospital-50 dark:bg-hospital-900/30 text-hospital-700 dark:text-hospital-300 font-bold"
-                          : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400"
+                          ? "border-hospital-500 bg-hospital-50 dark:bg-hospital-900/40 text-hospital-600 dark:text-hospital-300 shadow-sm"
+                          : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900"
                       )}
                     >
-                      <Building2 size={16} /> In-Person OPD
+                      <Building2 size={15} /> In-Person OPD
                     </button>
 
                     <button
                       onClick={() => setConsultationType('video')}
                       className={clsx(
-                        "py-2 px-3 rounded-xl border text-xs font-medium flex items-center justify-center gap-2 transition-all",
+                        "py-2 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer",
                         consultationType === 'video'
-                          ? "border-hospital-500 bg-hospital-50 dark:bg-hospital-900/30 text-hospital-700 dark:text-hospital-300 font-bold"
-                          : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400"
+                          ? "border-hospital-500 bg-hospital-50 dark:bg-hospital-900/40 text-hospital-600 dark:text-hospital-300 shadow-sm"
+                          : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900"
                       )}
                     >
-                      <Video size={16} /> Video Consult
+                      <Video size={15} /> Video Consult
                     </button>
                   </div>
                 </div>
 
-                {/* Available Time Slots */}
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2 text-xs">
-                    <CalendarIcon size={14} className="text-hospital-500"/> 
-                    Available Slots Today (Aug 06, 2026)
-                  </h4>
+                {/* Colorful Available Visiting Time Slot Boxes */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-extrabold text-gray-900 dark:text-white flex items-center gap-1.5 text-xs">
+                      <Clock size={15} className="text-hospital-400"/> Select Visiting Time Slot
+                    </h4>
+                    <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                      8 Slots Open
+                    </span>
+                  </div>
 
-                  <div className="grid grid-cols-2 gap-2">
-                    {TIME_SLOTS.map(slot => (
-                      <button
-                        key={slot}
-                        onClick={() => setSelectedSlot(slot)}
-                        className={clsx(
-                          "py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all text-center",
-                          selectedSlot === slot 
-                            ? "bg-hospital-600 border-hospital-600 text-white shadow-md shadow-hospital-600/20" 
-                            : "border-gray-200 dark:border-gray-700 hover:border-hospital-400 dark:text-gray-300 dark:hover:bg-gray-700"
-                        )}
-                      >
-                        {slot}
-                      </button>
-                    ))}
+                  <div className="grid grid-cols-2 gap-2 max-h-[220px] overflow-y-auto pr-1 custom-scrollbar">
+                    {TIME_SLOTS_DATA.map((item) => {
+                      const isSelected = selectedSlot === item.time;
+                      const IconComp = item.icon;
+
+                      return (
+                        <button
+                          key={item.time}
+                          type="button"
+                          onClick={() => setSelectedSlot(item.time)}
+                          className={clsx(
+                            "p-3 rounded-2xl border transition-all text-left flex flex-col justify-between gap-1.5 cursor-pointer relative overflow-hidden group",
+                            isSelected
+                              ? "bg-gradient-to-r from-hospital-600 via-hospital-500 to-indigo-600 border-2 border-cyan-300 text-white font-extrabold shadow-xl shadow-hospital-600/40 ring-2 ring-cyan-400/40 scale-[1.02]"
+                              : item.color
+                          )}
+                        >
+                          <div className="flex items-center justify-between w-full">
+                            <span className="font-mono text-xs font-black tracking-wide flex items-center gap-1">
+                              <IconComp size={13} className={isSelected ? 'text-cyan-200' : 'text-white/70'} />
+                              {item.time}
+                            </span>
+                            <span className={clsx(
+                              "text-[9px] font-extrabold px-1.5 py-0.5 rounded-md border uppercase tracking-wider shrink-0",
+                              isSelected 
+                                ? "bg-white text-hospital-700 border-white font-black shadow-sm animate-pulse" 
+                                : item.badgeColor
+                            )}>
+                              {isSelected ? 'Selected ✓' : item.session}
+                            </span>
+                          </div>
+
+                          <span className={clsx(
+                            "text-[10px] font-semibold block",
+                            isSelected ? "text-cyan-100" : "text-white/80"
+                          )}>
+                            {isSelected ? 'Visiting Slot Confirmed' : `OPD ${item.session} Session`}
+                          </span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -244,10 +323,10 @@ export default function AppointmentBooking() {
                 <button 
                   disabled={!selectedSlot}
                   onClick={handleConfirmBooking}
-                  className="w-full bg-hospital-600 hover:bg-hospital-700 disabled:bg-gray-200 dark:disabled:bg-gray-700 disabled:text-gray-400 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-hospital-600/20 text-sm flex items-center justify-center gap-2"
+                  className="w-full bg-hospital-600 hover:bg-hospital-700 disabled:bg-slate-800 disabled:text-slate-500 disabled:border disabled:border-slate-700 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-2xl transition-all shadow-lg shadow-hospital-600/20 text-xs flex items-center justify-center gap-2 cursor-pointer mt-2"
                 >
                   <CheckCircle2 size={18} /> 
-                  {selectedSlot ? `Confirm Booking (₹${selectedDoctor.fee})` : 'Select a Time Slot'}
+                  {selectedSlot ? `Confirm Visiting Slot (${selectedSlot}) • ₹${selectedDoctor.fee}` : 'Select a Time Slot Above'}
                 </button>
               </>
             ) : (
@@ -266,7 +345,7 @@ export default function AppointmentBooking() {
       {/* BOOKING CONFIRMATION MODAL */}
       {/* ========================================================================= */}
       {bookingSuccessModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
           <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5 animate-zoom relative">
             
             <button 
@@ -280,42 +359,60 @@ export default function AppointmentBooking() {
               <div className="w-16 h-16 bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-300 rounded-full flex items-center justify-center mx-auto shadow-inner">
                 <CheckCircle2 size={36} />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Appointment Confirmed!</h3>
-              <p className="text-xs text-gray-500">Your token has been generated successfully.</p>
+
+              <span className="inline-block bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold px-3 py-1 rounded-full border border-emerald-300 dark:border-emerald-800">
+                OPD Token Confirmed & Registered
+              </span>
+
+              <h3 className="text-2xl font-black text-gray-900 dark:text-white">
+                Appointment Booked!
+              </h3>
+              
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Booking ID: <strong className="font-mono text-hospital-600 dark:text-hospital-400">{bookingSuccessModal.bookingId}</strong>
+              </p>
             </div>
 
-            <div className="bg-gray-50 dark:bg-gray-800/60 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 space-y-3 text-xs">
-              <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-2">
-                <span className="text-gray-400 font-medium">Your Token Number</span>
-                <span className="text-2xl font-black text-hospital-600 dark:text-hospital-400">#{bookingSuccessModal.tokenNumber}</span>
+            {/* Token Badge */}
+            <div className="bg-gradient-to-r from-hospital-600 to-indigo-600 text-white rounded-2xl p-4 text-center space-y-1 shadow-lg shadow-hospital-600/20">
+              <span className="text-[10px] uppercase font-bold tracking-widest text-hospital-200">Your OPD Token Number</span>
+              <div className="text-4xl font-black tracking-wider">#{bookingSuccessModal.tokenNumber}</div>
+              <span className="text-[11px] text-emerald-200 font-medium block">Show this token at OPD Counter upon arrival</span>
+            </div>
+
+            {/* Appointment Details */}
+            <div className="bg-gray-50 dark:bg-gray-800/80 rounded-2xl p-4 text-xs space-y-2.5 border border-gray-100 dark:border-gray-700">
+              <div className="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-gray-700">
+                <span className="text-gray-500">Doctor</span>
+                <span className="font-bold text-gray-900 dark:text-white">{bookingSuccessModal.doctor.name}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Doctor:</span>
-                <span className="font-semibold text-gray-800 dark:text-gray-200">{bookingSuccessModal.doctor.name}</span>
+
+              <div className="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-gray-700">
+                <span className="text-gray-500">Specialty</span>
+                <span className="font-semibold text-hospital-600 dark:text-hospital-400">{bookingSuccessModal.doctor.specialty}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Specialty:</span>
-                <span className="font-semibold text-hospital-600">{bookingSuccessModal.doctor.specialty}</span>
+
+              <div className="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-gray-700">
+                <span className="text-gray-500">Visiting Date & Time</span>
+                <span className="font-bold text-emerald-600 dark:text-emerald-400 font-mono">{bookingSuccessModal.date} • {bookingSuccessModal.slot}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Date & Slot:</span>
-                <span className="font-semibold text-gray-800 dark:text-gray-200">{bookingSuccessModal.date} at {bookingSuccessModal.slot}</span>
+
+              <div className="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-gray-700">
+                <span className="text-gray-500">Consultation Type</span>
+                <span className="font-semibold text-gray-800 dark:text-gray-200 capitalize">{bookingSuccessModal.type}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Location:</span>
-                <span className="font-semibold text-gray-800 dark:text-gray-200">{bookingSuccessModal.doctor.location}</span>
-              </div>
-              <div className="flex justify-between pt-2 border-t border-gray-200 dark:border-gray-700 font-bold text-sm">
-                <span>Fee Amount:</span>
-                <span className="text-emerald-600 dark:text-emerald-400">₹{bookingSuccessModal.doctor.fee}</span>
+
+              <div className="flex justify-between items-center">
+                <span className="text-gray-500">OPD Location</span>
+                <span className="font-medium text-gray-800 dark:text-gray-200">{bookingSuccessModal.doctor.location}</span>
               </div>
             </div>
 
-            <button 
+            <button
               onClick={() => setBookingSuccessModal(null)}
-              className="w-full bg-hospital-600 hover:bg-hospital-700 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-hospital-600/20 text-sm"
+              className="w-full py-3 bg-hospital-600 hover:bg-hospital-700 text-white rounded-xl font-bold text-xs shadow-md transition-all"
             >
-              Done & View Live Queue
+              Done & Save Digital Pass
             </button>
 
           </div>
