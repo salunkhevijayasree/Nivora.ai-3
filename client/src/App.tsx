@@ -29,7 +29,7 @@ function App() {
       <AuthProvider>
         <HospitalProvider>
           <Router>
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-200 pb-20 md:pb-0 relative">
+            <div className="min-h-screen bg-slate-900 text-slate-100 font-sans transition-colors duration-200 pb-20 md:pb-0 relative">
               <Navbar />
               <main className="max-w-5xl mx-auto p-4 pt-6">
                 <Routes>

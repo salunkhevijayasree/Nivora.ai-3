@@ -40,8 +40,14 @@
 }
 
 /* ================================================
-   Base Styles
+   Base Styles — Deep Dark Blue Permanent Background
    ================================================ */
+
+html, body, #root {
+  background-color: #0f172a !important; /* Deep Dark Blue / Slate 900 */
+  color: #f8fafc !important;
+  min-height: 100vh;
+}
 
 @layer base {
   * {
@@ -54,6 +60,8 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
   }
 
   /* Scrollbar styling */
@@ -62,14 +70,11 @@
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: transparent;
+    background: #0f172a;
   }
   ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 3px;
-  }
-  .dark ::-webkit-scrollbar-thumb {
     background: #334155;
+    border-radius: 3px;
   }
 }
 
