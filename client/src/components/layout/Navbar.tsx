@@ -3,7 +3,7 @@ import { Moon, Bell, UserCircle, Activity, Bot, Sparkles, LogOut, LogIn } from '
 import { useAuth } from '../../context/AuthContext';
 
 export default function Navbar() {
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, logout, activeProfile } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -66,7 +66,7 @@ export default function Navbar() {
                   <UserCircle size={22} />
                 </div>
                 <span className="text-xs font-bold text-gray-200 hidden sm:block">
-                  {user?.name || 'Puja Sharma'}
+                  {activeProfile?.name || 'Puja Sharma'}
                 </span>
               </Link>
 

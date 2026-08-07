@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useHospital } from '../context/HospitalContext';
+import { useAuth } from '../context/AuthContext';
 
 const gridItems = [
   { id: 'find-book-doctor', title: 'Find Doctor & Book', icon: CalendarPlus, color: 'bg-blue-600', route: '/patient/appointments' },
@@ -33,6 +34,7 @@ const gridItems = [
 export default function PatientHome() {
   const navigate = useNavigate();
   const { selectedHospital } = useHospital();
+  const { activeProfile } = useAuth();
 
   return (
     <div className="space-y-6 animate-in">
@@ -75,7 +77,7 @@ export default function PatientHome() {
         </div>
       )}
       
-      {/* Welcome Banner */}
+      {/* Dynamic Active Patient Welcome Banner */}
       <div className="bg-gradient-to-r from-hospital-600 via-hospital-700 to-indigo-900 rounded-3xl p-6 text-white shadow-xl shadow-hospital-900/20 relative overflow-hidden space-y-3">
         <div className="relative z-10">
           <div className="flex flex-wrap items-center gap-2 mb-2">
@@ -83,13 +85,13 @@ export default function PatientHome() {
               <Bot size={13} className="text-hospital-300" /> Powered by NIVORA AI Engine
             </span>
             <span className="inline-flex items-center gap-1.5 bg-emerald-500/20 backdrop-blur-md px-3 py-0.5 rounded-full text-xs font-medium text-emerald-200">
-              <ShieldCheck size={13} /> Puja Sharma (ABHA ID: 91-xxxx-4321)
+              <ShieldCheck size={13} /> {activeProfile.name} ({activeProfile.relation}) • ABHA: {activeProfile.abhaId}
             </span>
           </div>
 
-          <h1 className="text-2xl md:text-3xl font-bold mb-1">Welcome back, Puja Sharma! 👋</h1>
+          <h1 className="text-2xl md:text-3xl font-bold mb-1">Welcome back, {activeProfile.name}! 👋</h1>
           <p className="text-hospital-100 max-w-md text-xs sm:text-sm leading-relaxed">
-            Encounter active at <strong className="text-white font-bold">{selectedHospital ? selectedHospital.name : 'Apollo Hospitals'}</strong>. Upcoming Cardiology check-up today at 2:30 PM (Token #42).
+            Encounter active for <strong className="text-white font-bold">{activeProfile.name}</strong> ({activeProfile.patientCode}) at <strong className="text-white font-bold">{selectedHospital ? selectedHospital.name : 'Apollo Hospitals'}</strong>. Upcoming Cardiology check-up today at 2:30 PM (Token #42).
           </p>
         </div>
         <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
@@ -99,7 +101,7 @@ export default function PatientHome() {
       <div className="flex items-center justify-between mt-8 mb-4">
         <div>
           <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">Hospital Services</h2>
-          <p className="text-xs text-gray-400">Services scoped to {selectedHospital ? selectedHospital.name : 'selected hospital'}</p>
+          <p className="text-xs text-gray-400">Services scoped to {selectedHospital ? selectedHospital.name : 'selected hospital'} for {activeProfile.name}</p>
         </div>
         <button 
           onClick={() => navigate('/patient/hospitals')}

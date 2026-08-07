@@ -25,22 +25,29 @@ const QUICK_SUGGESTIONS = [
   { label: '💊 How to refill my medication?', prompt: 'How do I order a refill for my prescribed Amoxicillin & Lisinopril?' },
 ];
 
+import { useAuth } from '../../context/AuthContext';
+
 export default function AIChatbotWidget() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const { selectedHospital } = useHospital();
+  const { activeProfile } = useAuth();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      sender: 'ai',
-      text: `Hello Puja Sharma! 👋 I am your NIVORA AI Health & Hospital Assistant${selectedHospital ? ` for ${selectedHospital.name}` : ''}. How can I assist you with doctor booking, queue tracking, lab reports, or symptom triage today?`,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  useEffect(() => {
+    setMessages([
+      {
+        id: '1',
+        sender: 'ai',
+        text: `Hello ${activeProfile?.name || 'Puja Sharma'}! 👋 I am your NIVORA AI Health & Hospital Assistant${selectedHospital ? ` for ${selectedHospital.name}` : ''}. How can I assist you with doctor booking, queue tracking, lab reports, or symptom triage today?`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }
+    ]);
+  }, [activeProfile, selectedHospital]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
