@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Bot, 
   Send, 
@@ -25,6 +26,7 @@ const QUICK_SUGGESTIONS = [
 ];
 
 export default function AIChatbotWidget() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -109,6 +111,11 @@ export default function AIChatbotWidget() {
     }, 1000);
   };
 
+  const handleActionClick = (route: string) => {
+    setIsOpen(false);
+    navigate(route);
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -170,14 +177,14 @@ export default function AIChatbotWidget() {
               {msg.quickActions && msg.quickActions.length > 0 && (
                 <div className="mt-2.5 pt-2 border-t border-gray-100 dark:border-gray-700/60 flex flex-col gap-1.5">
                   {msg.quickActions.map((act, i) => (
-                    <a
+                    <button
                       key={i}
-                      href={act.route}
-                      className="bg-hospital-50 dark:bg-hospital-900/40 text-hospital-700 dark:text-hospital-300 hover:bg-hospital-100 px-3 py-1.5 rounded-xl font-bold transition-all text-[11px] flex items-center justify-between border border-hospital-200 dark:border-hospital-800"
+                      onClick={() => handleActionClick(act.route)}
+                      className="bg-hospital-50 dark:bg-hospital-900/40 text-hospital-700 dark:text-hospital-300 hover:bg-hospital-100 px-3 py-1.5 rounded-xl font-bold transition-all text-[11px] flex items-center justify-between border border-hospital-200 dark:border-hospital-800 text-left w-full cursor-pointer"
                     >
                       <span>{act.label}</span>
                       <ChevronDown size={14} className="-rotate-90 text-hospital-500" />
-                    </a>
+                    </button>
                   ))}
                 </div>
               )}
